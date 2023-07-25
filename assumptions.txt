@@ -1,1 +1,3 @@
 Here will be added all the assumptions that's simplify or are interesting for the project.
+1)When a node doesn't change p-value after an iteration, it's possible to stop sending its value
+2)The algorithm converge when all the nodes have the same value for 2 iterations
