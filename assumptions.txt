@@ -1,3 +1,5 @@
 Here will be added all the assumptions that's simplify or are interesting for the project.
-1)When a node doesn't change p-value after an iteration, it's possible to stop sending its value
-2)The algorithm converge when all the nodes have the same value for 2 iterations
+1)There is a master node, main, that launch on worker the mapper and reducer tasks.
+1.1)Is master responsibility to merge data obtained from reducer.
+2)The algorithm converge when all the nodes have the same value for 2 iterations or the difference is less than epsilon
+2.1)If doesn't converge the execution stops after 100 iteration

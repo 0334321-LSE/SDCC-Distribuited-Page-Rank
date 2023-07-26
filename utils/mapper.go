@@ -6,10 +6,6 @@ import (
 	"strings"
 )
 
-/*type Mapper struct {
-	node Node
-}*/
-
 // MapPageRank -> Map function to evaluate each node contributes
 func MapPageRank(node *models.Node, result chan<- string) {
 	numOutLinks := float64(len(node.OutLinks))

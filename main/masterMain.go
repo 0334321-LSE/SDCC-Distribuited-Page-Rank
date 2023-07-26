@@ -5,10 +5,15 @@ import (
 	"PageRank/models"
 	"PageRank/utils"
 	"fmt"
+	"log"
+	"sync"
+	"time"
 )
 
 func main() {
-	//wg := new(sync.WaitGroup)
+	start := time.Now()
+	utils.CreateRandomGraph(50, 2)
+
 	graph := utils.Convert(constants.GraphPath)
 	if graph == nil {
 		fmt.Println("Something went wrong during file opening, aborting")
@@ -32,6 +37,7 @@ func main() {
 		// Chanel for intermediate result of reducers
 		reduceOutput := make(chan string, numNodes)
 
+		/* Without go routine
 		// Starting mapper phase, for each node launch a mapper
 		for _, node := range graph {
 			utils.MapPageRank(node, mapOutput)
@@ -45,39 +51,38 @@ func main() {
 
 		// Closing Reduce channel
 		close(reduceOutput)
+		*/
+
+		/* with go routine */
+
+		wg := new(sync.WaitGroup)
+		// Starting mapper nodes, for each node launch a mapper
+		for _, node := range graph {
+			wg.Add(1)
+			go func(node *models.Node) {
+				defer wg.Done()
+				utils.MapPageRank(node, mapOutput)
+
+			}(node)
+		}
+
+		// Closing Map chanel
+		wg.Wait()
+		close(mapOutput)
+
+		// Starting reducer nodes for each node launch a mapper
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			utils.ReducePageRank(mapOutput, reduceOutput, numNodes)
+		}()
+
+		// Closing Reduce chanel
+		wg.Wait()
+		close(reduceOutput)
 
 		// Update page rank value
 		models.UpdatePageRanks(graph, reduceOutput)
-
-		/*
-				with go routine
-			// Starting mapper nodes, for each node launch a mapper
-				for _, node := range graph {
-					wg.Add(1)
-					go func(node *models.Node) {
-						defer wg.Done()
-						utils.MapPageRank(node, mapOutput)
-
-					}(node)
-				}
-
-				// Closing Map chanel
-				wg.Wait()
-				close(mapOutput)
-
-				// Starting reducer nodes for each node launch a mapper
-				for _, node := range graph {
-					wg.Add(1)
-					go func(node *models.Node) {
-						defer wg.Done()
-						utils.ReducePageRank(node, mapOutput, reduceOutput, numNodes)
-					}(node)
-				}
-
-				// Closing Reduce chanel
-
-				wg.Wait()
-				close(reduceOutput)*/
 
 		newPageRankList = models.ListOfPageRank(graph)
 
@@ -95,4 +100,7 @@ func main() {
 		fmt.Printf("Nodo: %s, PageRank: %f\n", node.ID, node.PageRank)
 	}
 
+	models.PlotGraphByPageRank(graph)
+	elapsed := time.Since(start)
+	log.Printf("PageRank algorithm tooks: %s", elapsed)
 }
