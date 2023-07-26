@@ -13,10 +13,12 @@ import (
 
 // BarabasiAlbertGraph genera un grafo utilizzando l'algoritmo Barabasi-Albert.
 // nodes è il numero di nodi nel grafo, edgesToAttach rappresenta quanti archi collegare ad ogni nuovo nodo.
-func BarabasiAlbertGraph(nodes, edgesToAttach int) map[int][]int {
+func BarabasiAlbertGraph(nodes, edgesToAttach int, seed int64) map[int][]int {
 	if nodes < 1 {
 		return nil
 	}
+
+	rand.Seed(int64(seed)) // Imposta il seed per la generazione casuale.
 
 	graph := make(map[int][]int)
 	degreeSum := make([]int, nodes)
@@ -28,23 +30,69 @@ func BarabasiAlbertGraph(nodes, edgesToAttach int) map[int][]int {
 	for i := 1; i < nodes; i++ {
 		graph[i] = []int{}
 
-		for j := 0; j < edgesToAttach; j++ {
-			// Scegli un nodo esistente in modo casuale, considerando il grado dei nodi.
-			attachNode := rand.Intn(i)
-			graph[i] = append(graph[i], attachNode)
-			graph[attachNode] = append(graph[attachNode], i)
+		// Calcola le probabilità di selezionare un nodo esistente come destinazione.
+		probabilities := make([]float64, i)
+		for j := 0; j < i; j++ {
+			probabilities[j] = float64(degreeSum[j]) / float64(degreeSum[i-1]*edgesToAttach)
+		}
 
-			// Aggiorna la somma dei gradi per i nodi coinvolti.
-			degreeSum[i]++
-			degreeSum[attachNode]++
+		// Tenta di creare gli archi per il nuovo nodo.
+		for j := 0; j < edgesToAttach; j++ {
+			// Utilizza l'algoritmo di preferential attachment per scegliere un nodo esistente come destinazione.
+			maxNode := rouletteSelect(probabilities)
+
+			// Verifica se l'arco esiste già prima di aggiungerlo al grafo.
+			if !hasEdge(graph, i, maxNode) {
+				// Decide casualmente se aggiungere l'arco in modo unidirezionale o bidirezionale.
+				if rand.Float64() < 0.5 {
+					graph[i] = append(graph[i], maxNode)
+				} else {
+					graph[i] = append(graph[i], maxNode)
+					graph[maxNode] = append(graph[maxNode], i)
+				}
+
+				// Aggiorna la somma dei gradi per i nodi coinvolti.
+				degreeSum[i]++
+				degreeSum[maxNode]++
+			}
 		}
 	}
 
 	return graph
 }
 
+func rouletteSelect(weights []float64) int {
+	totalWeight := 0.0
+	for _, weight := range weights {
+		totalWeight += weight
+	}
+
+	r := rand.Float64() * totalWeight
+	currentWeight := 0.0
+
+	for i, weight := range weights {
+		currentWeight += weight
+		if currentWeight >= r {
+			return i
+		}
+	}
+
+	return len(weights) - 1
+}
+
+// Controlla se esiste già un arco tra due nodi nel grafo.
+func hasEdge(graph map[int][]int, node1, node2 int) bool {
+	for _, neighbor := range graph[node1] {
+		if neighbor == node2 {
+			return true
+		}
+	}
+	return false
+}
+
 // plotGraph genera un grafico con nodi colorati con i numeri dei nodi all'interno dei cerchi e archi senza frecce. Lo salva come immagine PNG.
 func plotGraph(graph map[int][]int) {
+	//TODO  try to understand why doesn't plot well all the arrows
 	rand.Seed(42) // Imposta un seed fisso per avere la stessa disposizione dei nodi ad ogni esecuzione.
 
 	dc := gg.NewContext(1240, 1754) // Dimensioni in pixel per un foglio A4 verticale (210 x 297 mm a 300 dpi).
@@ -123,12 +171,22 @@ func plotGraph(graph map[int][]int) {
 		dc.DrawStringAnchored(fmt.Sprintf("%d", node), nodePositions[node].x, nodePositions[node].y, 0.5, 0.5)
 	}
 
-	// Disegna gli archi tra i nodi.
+	// Disegna gli archi orientati con frecce (o quadrati) verso i nodi destinazione con grado maggiore di zero.
 	dc.SetRGB(0, 0, 0)
 	for node, neighbors := range graph {
 		x1 := nodePositions[node].x
 		y1 := nodePositions[node].y
 		for _, neighbor := range neighbors {
+			// Controlla se l'arco inverso esiste tra i nodi.
+			neighborOutlinks := graph[neighbor]
+			existsInverse := false
+			for out := range neighborOutlinks {
+				if out == node {
+					existsInverse = true
+				}
+			}
+
+			// Disegna l'arco tra i nodi.
 			x2 := nodePositions[neighbor].x
 			y2 := nodePositions[neighbor].y
 
@@ -145,12 +203,44 @@ func plotGraph(graph map[int][]int) {
 			intersectX2 := x2 - (dx/distance)*radius2
 			intersectY2 := y2 - (dy/distance)*radius2
 
-			// Disegna l'arco tra i nodi utilizzando i punti di intersezione.
 			dc.DrawLine(intersectX1, intersectY1, intersectX2, intersectY2)
+			dc.SetLineWidth(2.0)
 			dc.Stroke()
+
+			// Calcola la direzione della freccia.
+			angle := math.Atan2(intersectY2-intersectY1, intersectX2-intersectX1)
+
+			// Disegna le frecce in entrambe le direzioni per gli archi bidirezionali.
+			if existsInverse {
+				arrowSize := 10.0
+				arrowX1 := intersectX1 + arrowSize*math.Cos(angle-math.Pi/6)
+				arrowY1 := intersectY1 + arrowSize*math.Sin(angle-math.Pi/6)
+				arrowX2 := intersectX1 + arrowSize*math.Cos(angle+math.Pi/6)
+				arrowY2 := intersectY1 + arrowSize*math.Sin(angle+math.Pi/6)
+
+				dc.MoveTo(intersectX1, intersectY1)
+				dc.LineTo(arrowX1, arrowY1)
+				dc.LineTo(arrowX2, arrowY2)
+				dc.LineTo(intersectX1, intersectY1)
+				dc.Fill()
+			}
+
+			// Disegna una sola freccia per gli archi monodirezionali.
+			if !existsInverse {
+				arrowSize := 10.0
+				arrowX1 := intersectX2 - arrowSize*math.Cos(angle-math.Pi/6)
+				arrowY1 := intersectY2 - arrowSize*math.Sin(angle-math.Pi/6)
+				arrowX2 := intersectX2 - arrowSize*math.Cos(angle+math.Pi/6)
+				arrowY2 := intersectY2 - arrowSize*math.Sin(angle+math.Pi/6)
+
+				dc.MoveTo(intersectX2, intersectY2)
+				dc.LineTo(arrowX1, arrowY1)
+				dc.LineTo(arrowX2, arrowY2)
+				dc.LineTo(intersectX2, intersectY2)
+				dc.Fill()
+			}
 		}
 	}
-
 	// Salva l'immagine come file PNG.
 	if err := dc.SavePNG("graph.png"); err != nil {
 		fmt.Println("Errore durante il salvataggio del grafico:", err)
@@ -185,10 +275,10 @@ func writeAdjacencyListToFile(graph map[int][]int, filename string) error {
 	return nil
 }
 
-func CreateRandomGraph(numNodes int, edgesToAttach int) {
+func CreateRandomGraph(numNodes int, edgesToAttach int, seed int64) {
 
 	// Genera il grafo utilizzando l'algoritmo Barabasi-Albert.
-	graph := BarabasiAlbertGraph(numNodes, edgesToAttach)
+	graph := BarabasiAlbertGraph(numNodes, edgesToAttach, seed)
 
 	// Stampa la lista di adiacenza del grafo.
 	fmt.Println("Lista di adiacenza:")
@@ -197,7 +287,7 @@ func CreateRandomGraph(numNodes int, edgesToAttach int) {
 	}
 
 	// Salva la lista di adiacenza su un file di testo.
-	if err := writeAdjacencyListToFile(graph, "graph1.txt"); err != nil {
+	if err := writeAdjacencyListToFile(graph, "graph.txt"); err != nil {
 		fmt.Println("Errore durante il salvataggio della lista di adiacenza:", err)
 		return
 	}

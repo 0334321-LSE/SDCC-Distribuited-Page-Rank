@@ -12,7 +12,7 @@ import (
 
 func main() {
 	start := time.Now()
-	utils.CreateRandomGraph(50, 2)
+	utils.CreateRandomGraph(10, 2, 3)
 
 	graph := utils.Convert(constants.GraphPath)
 	if graph == nil {
