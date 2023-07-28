@@ -1,0 +1,1 @@
+1) Modify the project, use RPC to able the communication between master and workers

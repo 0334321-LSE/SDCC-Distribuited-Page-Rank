@@ -12,7 +12,7 @@ import (
 
 func main() {
 	start := time.Now()
-	utils.CreateRandomGraph(10, 2, 3)
+	utils.CreateRandomGraph(10, 5, 3)
 
 	graph := utils.Convert(constants.GraphPath)
 	if graph == nil {
@@ -92,13 +92,16 @@ func main() {
 
 	// Print final results
 	if convergence {
-		fmt.Println("Obtained convergence, here final results:")
+		fmt.Printf("Obtained convergence after %d iteration, here final results: \n", iteration)
 	} else {
 		fmt.Println("Convergence isn't obtained try to do more iterations")
 	}
+	pageRankSum := 0.0
 	for _, node := range graph {
 		fmt.Printf("Nodo: %s, PageRank: %f\n", node.ID, node.PageRank)
+		pageRankSum += node.PageRank
 	}
+	fmt.Println("Sums of pageRank values: ", pageRankSum)
 
 	models.PlotGraphByPageRank(graph)
 	elapsed := time.Since(start)
