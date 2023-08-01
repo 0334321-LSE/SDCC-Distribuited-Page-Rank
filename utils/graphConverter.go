@@ -4,7 +4,9 @@ import (
 	"PageRank/models"
 	"bufio"
 	"fmt"
+	"log"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -33,9 +35,14 @@ func Convert(graphPath string) []*models.Node {
 		line := scanner.Text()
 		parts := strings.Fields(line)
 		node := parts[0]
+		nodeID, err := strconv.Atoi(node)
+		if err != nil {
+			log.Fatalf("Error occured during txt scanning %v", err)
+		}
 		outgoingLinks := parts[2:]
 		outgoingLinks = FixStrings(outgoingLinks)
-		actualNode := models.Node{ID: node, OutLinks: outgoingLinks, PageRank: 1}
+		outgoingLinksInt := ConvertOutLinks(outgoingLinks)
+		actualNode := models.Node{ID: nodeID, OutLinks: outgoingLinksInt, PageRank: 1}
 		graph = append(graph, &actualNode)
 	}
 
@@ -52,6 +59,19 @@ func FixStrings(list []string) []string {
 	var correctArray []string
 	for _, s := range list {
 		correctArray = append(correctArray, strings.ReplaceAll(s, ",", ""))
+	}
+	return correctArray
+}
+
+// ConvertOutLinks -> converts all the outlinks string to integer
+func ConvertOutLinks(list []string) []int {
+	var correctArray []int
+	for _, s := range list {
+		nodeID, err := strconv.Atoi(s)
+		if err != nil {
+			log.Fatalf("Error occured during outlink convertion %v", err)
+		}
+		correctArray = append(correctArray, nodeID)
 	}
 	return correctArray
 }

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"git.sr.ht/~sbinet/gg"
 	"image/color"
+	"log"
 	"math"
 	"math/rand"
 	"strconv"
@@ -13,8 +14,8 @@ import (
 
 // Node -> Structure of nodes
 type Node struct {
-	ID       string
-	OutLinks []string
+	ID       int
+	OutLinks []int
 	PageRank float64
 }
 
@@ -51,16 +52,20 @@ func ListOfPageRank(list []*Node) []float64 {
 func UpdatePageRanks(nodeList []*Node, result <-chan string) {
 
 	//Map contains pageRanks for each node
-	var pageRankMap map[string]float64
-	pageRankMap = make(map[string]float64)
+	var pageRankMap map[int]float64
+	pageRankMap = make(map[int]float64)
 
 	// Obtains page rank for each node
 	for line := range result {
 		//Divides row into nodeID, pageRankValue and save it into pageRankMap
 		lineParts := strings.Split(line, "\t")
 		node := lineParts[0]
+		nodeID, err := strconv.Atoi(node)
+		if err != nil {
+			log.Fatalf("An error occured %v", err)
+		}
 		linePagerankValue, _ := strconv.ParseFloat(lineParts[1], 64)
-		pageRankMap[node] = linePagerankValue
+		pageRankMap[nodeID] = linePagerankValue
 	}
 	// Then update nodeList
 	for _, node := range nodeList {
@@ -81,10 +86,10 @@ func PlotGraphByPageRank(nodes []*Node) {
 	minNodeDistance := 150.0
 
 	// Mappa per tenere traccia dei colori associati ai nodi.
-	nodeColors := make(map[string]color.Color)
+	nodeColors := make(map[int]color.Color)
 
 	// Mappa per tenere traccia delle posizioni dei nodi.
-	nodePositions := make(map[string]struct{ x, y float64 })
+	nodePositions := make(map[int]struct{ x, y float64 })
 
 	// Calcola il PageRank massimo tra tutti i nodi.
 	var maxPageRank float64
@@ -142,7 +147,7 @@ func PlotGraphByPageRank(nodes []*Node) {
 		// Disegna il numero del nodo all'interno del cerchio.
 		dc.SetRGB(0, 0, 0)
 		dc.LoadFontFace("luxisr.ttf", 14) // Imposta la dimensione del testo a 14.
-		dc.DrawStringAnchored(node.ID, nodePositions[node.ID].x, nodePositions[node.ID].y, 0.5, 0.5)
+		dc.DrawStringAnchored(strconv.FormatInt(int64(10), node.ID), nodePositions[node.ID].x, nodePositions[node.ID].y, 0.5, 0.5)
 	}
 
 	// Disegna gli archi tra i nodi.
@@ -189,7 +194,7 @@ func PlotGraphByPageRank(nodes []*Node) {
 }
 
 // findNodeByID -> as the name says ...
-func findNodeByID(nodes []*Node, id string) *Node {
+func findNodeByID(nodes []*Node, id int) *Node {
 	for _, node := range nodes {
 		if node.ID == id {
 			return node
