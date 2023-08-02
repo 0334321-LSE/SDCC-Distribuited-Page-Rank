@@ -63,7 +63,7 @@ func FixStrings(list []string) []string {
 	return correctArray
 }
 
-// ConvertOutLinks -> converts all the outlinks string to integer
+// ConvertOutLinks -> converts all the out-links string to integer
 func ConvertOutLinks(list []string) []int {
 	var correctArray []int
 	for _, s := range list {

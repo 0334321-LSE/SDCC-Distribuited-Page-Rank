@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"git.sr.ht/~sbinet/gg"
 	"image/color"
+	"log"
 	"math"
 	"math/rand"
 	"os"
@@ -275,24 +276,26 @@ func writeAdjacencyListToFile(graph map[int][]int, filename string) error {
 	return nil
 }
 
-func CreateRandomGraph(numNodes int, edgesToAttach int, seed int64) {
+// CreateRandomGraph -> generate a graph randomly by using Barabasi-Albert algorithm
+func CreateRandomGraph(numNodes int, edgesToAttach int, seed int64) map[int][]int {
 
-	// Genera il grafo utilizzando l'algoritmo Barabasi-Albert.
+	// Generate graph by using Barabasi-Albert.
 	graph := BarabasiAlbertGraph(numNodes, edgesToAttach, seed)
 
-	// Stampa la lista di adiacenza del grafo.
-	fmt.Println("Lista di adiacenza:")
+	// Print to monitor the adjacency list
+	log.Printf("\n-Adjacency list-\n")
 	for node, neighbors := range graph {
-		fmt.Printf("%d -> %v\n", node, neighbors)
+		log.Printf("%d -> %v\n", node, neighbors)
 	}
 
-	// Salva la lista di adiacenza su un file di testo.
+	// Save the list into a txt file.
 	if err := writeAdjacencyListToFile(graph, "graph.txt"); err != nil {
-		fmt.Println("Errore durante il salvataggio della lista di adiacenza:", err)
-		return
+		log.Printf("Error during txt saving: %v\n", err)
+		return nil
 	}
-	fmt.Println("Lista di adiacenza salvata come graph.txt")
+	log.Printf("List saved as graph.tx")
 
-	// Plotta e salva il grafico.
+	// Plot and save the graph
 	plotGraph(graph)
+	return graph
 }

@@ -2,6 +2,7 @@ package mapper
 
 import (
 	"context"
+	"log"
 )
 
 type Mapper struct {
@@ -17,6 +18,8 @@ func (mapper *Mapper) Map(ctx context.Context, input *MapperInput) (*MapperOutpu
 	numOutLinks := float32(len(input.AdjacencyList))
 	if numOutLinks > 0 {
 		pagerankShare := input.PageRank / numOutLinks
+
+		log.Printf("Share: %f for nodes: %s\n", pagerankShare, input.GetAdjacencyList())
 
 		return &MapperOutput{
 			PageRankShare: pagerankShare,

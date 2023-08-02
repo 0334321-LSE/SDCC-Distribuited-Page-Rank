@@ -1,0 +1,18 @@
+//reducer-proto
+syntax = "proto3";
+
+option go_package = "./reducer";
+
+message ReducerInput{
+  int32 node_id = 1;
+  repeated float page_rank_shares = 2;
+  int32 graph_size = 3;
+}
+
+message ReducerOutput {
+  int32 node_id = 1;
+  float new_rank_value = 2;
+}
+service Reducer{
+  rpc Reduce(ReducerInput) returns (ReducerOutput);
+}

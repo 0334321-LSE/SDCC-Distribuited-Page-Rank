@@ -2,11 +2,15 @@ package main
 
 import (
 	"PageRank/constants"
+	"PageRank/mapper"
 	"PageRank/models"
+	"PageRank/reducer"
 	"PageRank/utils"
+	"context"
 	"fmt"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"log"
-	"sync"
 	"time"
 )
 
@@ -27,67 +31,81 @@ func main() {
 	iteration := 0
 
 	for !convergence || iteration == constants.MaxIteration {
+		func() {
+			iteration++
+			aggregatePageRankShares := make(map[int][]float32)
+			log.Printf("\nIteration number: %d", iteration)
+			oldPageRank = models.ListOfPageRank(graph)
 
-		iteration++
-		fmt.Println("\nIteration number: ", iteration)
-		oldPageRank = models.ListOfPageRank(graph)
+			//----- MAPPER -----
+			// Create a grpc client connection with port 9000 localhost
+			var conn *grpc.ClientConn
+			conn, err := grpc.Dial(":9000", grpc.WithTransportCredentials(insecure.NewCredentials()))
+			if err != nil {
+				log.Fatalf("Could not connect: %s", err)
+			}
+			defer func(conn *grpc.ClientConn) {
+				err := conn.Close()
+				if err != nil {
+					log.Fatalf("Something went wrong during connection closing %v", err)
+				}
+			}(conn)
 
-		// Chanel for intermediate result of mappers
-		mapOutput := make(chan string, numNodes)
-		// Chanel for intermediate result of reducers
-		reduceOutput := make(chan string, numNodes)
+			// Connection with MapperClient at port 9000, for each node launch MAP job
+			mapperConnection := mapper.NewMapperClient(conn)
+			for _, node := range graph {
+				mapperInput := mapper.MapperInput{
+					PageRank:      float32(node.PageRank),
+					AdjacencyList: models.GetOutLinks(node),
+				}
+				mapperOutput, err := mapperConnection.Map(context.Background(), &mapperInput)
+				//Shuffle parts of map-reduce paradigm
+				for _, node := range mapperOutput.GetAdjacencyList() {
+					//Update page rank aggregate table by appending for each node in the mapper output corresponding share
+					aggregatePageRankShares[int(node)] = append(aggregatePageRankShares[int(node)], mapperOutput.PageRankShare)
+				}
+				if err != nil {
+					log.Fatalf("Error when calling Map function: %s", err)
+				}
+				log.Printf("\nAdjacency: %s Page-rank share: %f\n", mapperOutput.GetAdjacencyList(), mapperOutput.GetPageRankShare())
+			}
 
-		/* Without go routine
-		// Starting mapper phase, for each node launch a mapper
-		for _, node := range graph {
-			utils.MapPageRank(node, mapOutput)
-		}
+			//----- REDUCER -----
+			// Create a grpc client connection with port 9001 localhost
+			conn2, err := grpc.Dial(":9001", grpc.WithTransportCredentials(insecure.NewCredentials()))
+			if err != nil {
+				log.Fatalf("Could not connect: %s", err)
+			}
+			defer func(conn2 *grpc.ClientConn) {
+				err := conn2.Close()
+				if err != nil {
+					log.Fatalf("Something went wrong during connection closing %v", err)
+				}
+			}(conn2)
 
-		// Closing Map channel
-		close(mapOutput)
+			// Connection with ReducerClient at port 9001, for each node launch REDUCE-job
+			reducerConnection := reducer.NewReducerClient(conn2)
 
-		// Launch reduce phase
-		utils.ReducePageRank(mapOutput, reduceOutput, numNodes)
+			for _, node := range graph {
+				reducerInput := reducer.ReducerInput{
+					NodeId:         int32(node.ID),
+					PageRankShares: aggregatePageRankShares[node.ID],
+					GraphSize:      int32(numNodes),
+				}
+				reducerOutput, err := reducerConnection.Reduce(context.Background(), &reducerInput)
+				if err != nil {
+					log.Fatalf("Error when calling Reduce function: %s", err)
+				}
+				//Update node page rank value
+				node.PageRank = float64(reducerOutput.NewRankValue)
+			}
 
-		// Closing Reduce channel
-		close(reduceOutput)
-		*/
+			newPageRankList = models.ListOfPageRank(graph)
 
-		/* with go routine */
-
-		wg := new(sync.WaitGroup)
-		// Starting mapper nodes, for each node launch a mapper
-		for _, node := range graph {
-			wg.Add(1)
-			go func(node *models.Node) {
-				defer wg.Done()
-				utils.MapPageRank(node, mapOutput)
-
-			}(node)
-		}
-
-		// Closing Map chanel
-		wg.Wait()
-		close(mapOutput)
-
-		// Starting reducer nodes for each node launch a mapper
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			utils.ReducePageRank(mapOutput, reduceOutput, numNodes)
+			// Check the convergence of the algorithm
+			convergence = models.Convergence(oldPageRank, newPageRankList)
 		}()
 
-		// Closing Reduce chanel
-		wg.Wait()
-		close(reduceOutput)
-
-		// Update page rank value
-		models.UpdatePageRanks(graph, reduceOutput)
-
-		newPageRankList = models.ListOfPageRank(graph)
-
-		// Check the convergence of the algorithm
-		convergence = models.Convergence(oldPageRank, newPageRankList)
 	}
 
 	// Print final results

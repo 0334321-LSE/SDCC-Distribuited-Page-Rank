@@ -13,8 +13,10 @@ func main() {
 		log.Fatalf("Failed to listen on port 9000 %v", err)
 	}
 	log.Printf("Listening on port 9000 \n")
+
 	mapperServer := mapper.Mapper{}
-	// Initialize gRPC server of Mapper
+
+	// Initialize gRPC server for Mapper
 	grpcServer := grpc.NewServer()
 
 	mapper.RegisterMapperServer(grpcServer, &mapperServer)

@@ -1,1 +1,4 @@
-1) Modify the project, use RPC to able the communication between master and workers
+1) Modify the project, use RPC to able the communication between master and workers OK
+2) Fix various log output
+3) Add clean up phase
+4) Try to make the program work with docker on differnt container

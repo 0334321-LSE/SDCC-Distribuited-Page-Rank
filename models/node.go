@@ -5,11 +5,9 @@ import (
 	"fmt"
 	"git.sr.ht/~sbinet/gg"
 	"image/color"
-	"log"
 	"math"
 	"math/rand"
 	"strconv"
-	"strings"
 )
 
 // Node -> Structure of nodes
@@ -48,7 +46,7 @@ func ListOfPageRank(list []*Node) []float64 {
 	return pageRankList
 }
 
-// UpdatePageRanks -> take the result from reducer and update PageRank values for each node
+/*// UpdatePageRanks -> take the result from reducer and update PageRank values for each node
 func UpdatePageRanks(nodeList []*Node, result <-chan string) {
 
 	//Map contains pageRanks for each node
@@ -71,6 +69,15 @@ func UpdatePageRanks(nodeList []*Node, result <-chan string) {
 	for _, node := range nodeList {
 		node.PageRank = pageRankMap[node.ID]
 	}
+}*/
+
+// GetOutLinks -> return out-links of a node in int32 format
+func GetOutLinks(node *Node) []int32 {
+	var outLinks []int32
+	for _, link := range node.OutLinks {
+		outLinks = append(outLinks, int32(link))
+	}
+	return outLinks
 }
 
 // PlotGraphByPageRank -> plot-graph representation where nodes with greater PageRank are bigger
@@ -147,7 +154,7 @@ func PlotGraphByPageRank(nodes []*Node) {
 		// Disegna il numero del nodo all'interno del cerchio.
 		dc.SetRGB(0, 0, 0)
 		dc.LoadFontFace("luxisr.ttf", 14) // Imposta la dimensione del testo a 14.
-		dc.DrawStringAnchored(strconv.FormatInt(int64(10), node.ID), nodePositions[node.ID].x, nodePositions[node.ID].y, 0.5, 0.5)
+		dc.DrawStringAnchored(strconv.Itoa(node.ID), nodePositions[node.ID].x, nodePositions[node.ID].y, 0.5, 0.5)
 	}
 
 	// Disegna gli archi tra i nodi.
