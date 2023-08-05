@@ -1,0 +1,1076 @@
+
+Mapper iteration 1: 
+Adjacency list: [1 2 4 5] | Associated page-rank share: 0.025000
+
+Adjacency list: [0 2 3 5 6 8] | Associated page-rank share: 0.016667
+
+Adjacency list: [0 1 4 5 8] | Associated page-rank share: 0.020000
+
+Adjacency list: [1 2 4 5 7 9] | Associated page-rank share: 0.016667
+
+Adjacency list: [2 3 0 5] | Associated page-rank share: 0.025000
+
+Adjacency list: [4 1 0 2 3 7] | Associated page-rank share: 0.016667
+
+Adjacency list: [1 4 8] | Associated page-rank share: 0.033333
+
+Adjacency list: [1 5 4 3] | Associated page-rank share: 0.025000
+
+Adjacency list: [2 4 6 1] | Associated page-rank share: 0.025000
+
+Adjacency list: [3 4 0] | Associated page-rank share: 0.033333
+
+Reducer iteration 1: 
+Mapper iteration 2: 
+Adjacency list: [1 2 4 5] | Associated page-rank share: 0.027479
+
+Adjacency list: [0 2 3 5 6 8] | Associated page-rank share: 0.025403
+
+Adjacency list: [0 1 4 5 8] | Associated page-rank share: 0.024250
+
+Adjacency list: [1 2 4 5 7 9] | Associated page-rank share: 0.019028
+
+Adjacency list: [2 3 0 5] | Associated page-rank share: 0.045188
+
+Adjacency list: [4 1 0 2 3 7] | Associated page-rank share: 0.020681
+
+Adjacency list: [1 4 8] | Associated page-rank share: 0.016806
+
+Adjacency list: [1 5 4 3] | Associated page-rank share: 0.010833
+
+Adjacency list: [2 4 6 1] | Associated page-rank share: 0.018625
+
+Adjacency list: [3 4 0] | Associated page-rank share: 0.009722
+
+Reducer iteration 2: 
+Mapper iteration 3: 
+Adjacency list: [1 2 4 5] | Associated page-rank share: 0.030364
+
+Adjacency list: [0 2 3 5 6 8] | Associated page-rank share: 0.022008
+
+Adjacency list: [0 1 4 5 8] | Associated page-rank share: 0.029588
+
+Adjacency list: [1 2 4 5 7 9] | Associated page-rank share: 0.018342
+
+Adjacency list: [2 3 0 5] | Associated page-rank share: 0.035078
+
+Adjacency list: [4 1 0 2 3 7] | Associated page-rank share: 0.024059
+
+Adjacency list: [1 4 8] | Associated page-rank share: 0.017475
+
+Adjacency list: [1 5 4 3] | Associated page-rank share: 0.012188
+
+Adjacency list: [2 4 6 1] | Associated page-rank share: 0.017872
+
+Adjacency list: [3 4 0] | Associated page-rank share: 0.010391
+
+Reducer iteration 3: 
+Mapper iteration 4: 
+Adjacency list: [1 2 4 5] | Associated page-rank share: 0.029489
+
+Adjacency list: [0 2 3 5 6 8] | Associated page-rank share: 0.023734
+
+Adjacency list: [0 1 4 5 8] | Associated page-rank share: 0.028113
+
+Adjacency list: [1 2 4 5 7 9] | Associated page-rank share: 0.017194
+
+Adjacency list: [2 3 0 5] | Associated page-rank share: 0.037809
+
+Adjacency list: [4 1 0 2 3 7] | Associated page-rank share: 0.023405
+
+Adjacency list: [1 4 8] | Associated page-rank share: 0.016299
+
+Adjacency list: [1 5 4 3] | Associated page-rank share: 0.012760
+
+Adjacency list: [2 4 6 1] | Associated page-rank share: 0.018428
+
+Adjacency list: [3 4 0] | Associated page-rank share: 0.010197
+
+Reducer iteration 4: 
+Mapper iteration 5: 
+Adjacency list: [1 2 4 5] | Associated page-rank share: 0.029943
+
+Adjacency list: [0 2 3 5 6 8] | Associated page-rank share: 0.023139
+
+Adjacency list: [0 1 4 5 8] | Associated page-rank share: 0.028510
+
+Adjacency list: [1 2 4 5 7 9] | Associated page-rank share: 0.017787
+
+Adjacency list: [2 3 0 5] | Associated page-rank share: 0.036876
+
+Adjacency list: [4 1 0 2 3 7] | Associated page-rank share: 0.023622
+
+Adjacency list: [1 4 8] | Associated page-rank share: 0.016946
+
+Adjacency list: [1 5 4 3] | Associated page-rank share: 0.012377
+
+Adjacency list: [2 4 6 1] | Associated page-rank share: 0.018231
+
+Adjacency list: [3 4 0] | Associated page-rank share: 0.009872
+
+Reducer iteration 5: 
+Mapper iteration 6: 
+Adjacency list: [1 2 4 5] | Associated page-rank share: 0.029679
+
+Adjacency list: [0 2 3 5 6 8] | Associated page-rank share: 0.023384
+
+Adjacency list: [0 1 4 5 8] | Associated page-rank share: 0.028432
+
+Adjacency list: [1 2 4 5 7 9] | Associated page-rank share: 0.017501
+
+Adjacency list: [2 3 0 5] | Associated page-rank share: 0.037174
+
+Adjacency list: [4 1 0 2 3 7] | Associated page-rank share: 0.023556
+
+Adjacency list: [1 4 8] | Associated page-rank share: 0.016722
+
+Adjacency list: [1 5 4 3] | Associated page-rank share: 0.012549
+
+Adjacency list: [2 4 6 1] | Associated page-rank share: 0.018326
+
+Adjacency list: [3 4 0] | Associated page-rank share: 0.010040
+
+Reducer iteration 6: 
+Mapper iteration 7: 
+Adjacency list: [1 2 4 5] | Associated page-rank share: 0.029799
+
+Adjacency list: [0 2 3 5 6 8] | Associated page-rank share: 0.023292
+
+Adjacency list: [0 1 4 5 8] | Associated page-rank share: 0.028435
+
+Adjacency list: [1 2 4 5 7 9] | Associated page-rank share: 0.017616
+
+Adjacency list: [2 3 0 5] | Associated page-rank share: 0.037071
+
+Adjacency list: [4 1 0 2 3 7] | Associated page-rank share: 0.023568
+
+Adjacency list: [1 4 8] | Associated page-rank share: 0.016818
+
+Adjacency list: [1 5 4 3] | Associated page-rank share: 0.012475
+
+Adjacency list: [2 4 6 1] | Associated page-rank share: 0.018314
+
+Adjacency list: [3 4 0] | Associated page-rank share: 0.009958
+
+Reducer iteration 7: 
+Mapper iteration 8: 
+Adjacency list: [1 2 4 5] | Associated page-rank share: 0.029744
+
+Adjacency list: [0 2 3 5 6 8] | Associated page-rank share: 0.023329
+
+Adjacency list: [0 1 4 5 8] | Associated page-rank share: 0.028442
+
+Adjacency list: [1 2 4 5 7 9] | Associated page-rank share: 0.017568
+
+Adjacency list: [2 3 0 5] | Associated page-rank share: 0.037109
+
+Adjacency list: [4 1 0 2 3 7] | Associated page-rank share: 0.023564
+
+Adjacency list: [1 4 8] | Associated page-rank share: 0.016788
+
+Adjacency list: [1 5 4 3] | Associated page-rank share: 0.012502
+
+Adjacency list: [2 4 6 1] | Associated page-rank share: 0.018316
+
+Adjacency list: [3 4 0] | Associated page-rank share: 0.009991
+
+Reducer iteration 8: 
+Mapper iteration 9: 
+Adjacency list: [1 2 4 5] | Associated page-rank share: 0.029768
+
+Adjacency list: [0 2 3 5 6 8] | Associated page-rank share: 0.023314
+
+Adjacency list: [0 1 4 5 8] | Associated page-rank share: 0.028437
+
+Adjacency list: [1 2 4 5 7 9] | Associated page-rank share: 0.017587
+
+Adjacency list: [2 3 0 5] | Associated page-rank share: 0.037095
+
+Adjacency list: [4 1 0 2 3 7] | Associated page-rank share: 0.023565
+
+Adjacency list: [1 4 8] | Associated page-rank share: 0.016799
+
+Adjacency list: [1 5 4 3] | Associated page-rank share: 0.012491
+
+Adjacency list: [2 4 6 1] | Associated page-rank share: 0.018319
+
+Adjacency list: [3 4 0] | Associated page-rank share: 0.009978
+
+Reducer iteration 9: 
+Mapper iteration -> 1 
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.025000
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.016667
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.020000
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.016667
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.025000
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.016667
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.033333
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.025000
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.025000
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.033333
+
+Reducer iteration -> 1 
+
+Mapper iteration -> 2 
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.027479
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.025403
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.024250
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.019028
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.045188
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.020681
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016806
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.010833
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018625
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009722
+
+Reducer iteration -> 2 
+
+Mapper iteration -> 3 
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.030364
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.022008
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.029588
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.018342
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.035078
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.024059
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.017475
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012188
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.017872
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.010391
+
+Reducer iteration -> 3 
+
+Mapper iteration -> 4 
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029489
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023734
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028113
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017194
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037809
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023405
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016299
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012760
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018428
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.010197
+
+Reducer iteration -> 4 
+
+Mapper iteration -> 5 
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029943
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023139
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028510
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017787
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.036876
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023622
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016946
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012377
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018231
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009872
+
+Reducer iteration -> 5 
+
+Mapper iteration -> 6 
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029679
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023384
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028432
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017501
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037174
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023556
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016722
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012549
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018326
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.010040
+
+Reducer iteration -> 6 
+
+Mapper iteration -> 7 
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029799
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023292
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028435
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017616
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037071
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023568
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016818
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012475
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018314
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009958
+
+Reducer iteration -> 7 
+
+Mapper iteration -> 8 
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029744
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023329
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028442
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017568
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037109
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023564
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016788
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012502
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018316
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009991
+
+Reducer iteration -> 8 
+
+Mapper iteration -> 9 
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029768
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023314
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028437
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017587
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037095
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023565
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016799
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012491
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018319
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009978
+
+Reducer iteration -> 9 
+----------------------------------------------------2023-08-05 16:23:22 
+- Starting pagerank algorithm -
+
+MAPPER ITERATION -> 1 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.025000
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.016667
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.020000
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.016667
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.025000
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.016667
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.033333
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.025000
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.025000
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.033333
+
+REDUCER ITERATION -> 1 
+
+MAPPER ITERATION -> 2 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.027479
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.025403
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.024250
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.019028
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.045188
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.020681
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016806
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.010833
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018625
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009722
+
+REDUCER ITERATION -> 2 
+
+MAPPER ITERATION -> 3 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.030364
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.022008
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.029588
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.018342
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.035078
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.024059
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.017475
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012188
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.017872
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.010391
+
+REDUCER ITERATION -> 3 
+
+MAPPER ITERATION -> 4 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029489
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023734
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028113
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017194
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037809
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023405
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016299
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012760
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018428
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.010197
+
+REDUCER ITERATION -> 4 
+
+MAPPER ITERATION -> 5 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029943
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023139
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028510
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017787
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.036876
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023622
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016946
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012377
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018231
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009872
+
+REDUCER ITERATION -> 5 
+
+MAPPER ITERATION -> 6 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029679
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023384
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028432
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017501
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037174
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023556
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016722
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012549
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018326
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.010040
+
+REDUCER ITERATION -> 6 
+
+MAPPER ITERATION -> 7 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029799
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023292
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028435
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017616
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037071
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023568
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016818
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012475
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018314
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009958
+
+REDUCER ITERATION -> 7 
+
+MAPPER ITERATION -> 8 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029744
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023329
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028442
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017568
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037109
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023564
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016788
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012502
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018316
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009991
+
+REDUCER ITERATION -> 8 
+
+MAPPER ITERATION -> 9 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029768
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023314
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028437
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017587
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037095
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023565
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016799
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012491
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018319
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009978
+
+REDUCER ITERATION -> 9 
+----------------------------------------------------
+2023-08-05 16:23:43 
+- Starting pagerank algorithm -
+
+MAPPER ITERATION -> 1 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.025000
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.016667
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.020000
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.016667
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.025000
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.016667
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.033333
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.025000
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.025000
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.033333
+
+REDUCER ITERATION -> 1 
+
+MAPPER ITERATION -> 2 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.027479
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.025403
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.024250
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.019028
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.045188
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.020681
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016806
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.010833
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018625
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009722
+
+REDUCER ITERATION -> 2 
+
+MAPPER ITERATION -> 3 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.030364
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.022008
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.029588
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.018342
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.035078
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.024059
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.017475
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012188
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.017872
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.010391
+
+REDUCER ITERATION -> 3 
+
+MAPPER ITERATION -> 4 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029489
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023734
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028113
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017194
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037809
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023405
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016299
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012760
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018428
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.010197
+
+REDUCER ITERATION -> 4 
+
+MAPPER ITERATION -> 5 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029943
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023139
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028510
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017787
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.036876
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023622
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016946
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012377
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018231
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009872
+
+REDUCER ITERATION -> 5 
+
+MAPPER ITERATION -> 6 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029679
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023384
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028432
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017501
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037174
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023556
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016722
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012549
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018326
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.010040
+
+REDUCER ITERATION -> 6 
+
+MAPPER ITERATION -> 7 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029799
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023292
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028435
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017616
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037071
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023568
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016818
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012475
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018314
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009958
+
+REDUCER ITERATION -> 7 
+
+MAPPER ITERATION -> 8 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029744
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023329
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028442
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017568
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037109
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023564
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016788
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012502
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018316
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009991
+
+REDUCER ITERATION -> 8 
+
+MAPPER ITERATION -> 9 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029768
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023314
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028437
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017587
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037095
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023565
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016799
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012491
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018319
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009978
+
+REDUCER ITERATION -> 9 
+----------------------------------------------------
+2023-08-05 16:27:03 
+- Starting pagerank algorithm -
+
+MAPPER ITERATION -> 1 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.025000
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.016667
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.020000
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.016667
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.025000
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.016667
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.033333
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.025000
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.025000
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.033333
+
+REDUCER ITERATION -> 1 
+
+MAPPER ITERATION -> 2 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.027479
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.025403
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.024250
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.019028
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.045188
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.020681
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016806
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.010833
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018625
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009722
+
+REDUCER ITERATION -> 2 
+
+MAPPER ITERATION -> 3 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.030364
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.022008
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.029588
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.018342
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.035078
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.024059
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.017475
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012188
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.017872
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.010391
+
+REDUCER ITERATION -> 3 
+
+MAPPER ITERATION -> 4 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029489
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023734
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028113
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017194
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037809
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023405
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016299
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012760
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018428
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.010197
+
+REDUCER ITERATION -> 4 
+
+MAPPER ITERATION -> 5 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029943
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023139
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028510
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017787
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.036876
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023622
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016946
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012377
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018231
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009872
+
+REDUCER ITERATION -> 5 
+
+MAPPER ITERATION -> 6 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029679
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023384
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028432
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017501
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037174
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023556
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016722
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012549
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018326
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.010040
+
+REDUCER ITERATION -> 6 
+
+MAPPER ITERATION -> 7 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029799
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023292
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028435
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017616
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037071
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023568
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016818
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012475
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018314
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009958
+
+REDUCER ITERATION -> 7 
+
+MAPPER ITERATION -> 8 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029744
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023329
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028442
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017568
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037109
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023564
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016788
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012502
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018316
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009991
+
+REDUCER ITERATION -> 8 
+
+MAPPER ITERATION -> 9 
+
+Adjacency list-> [1 2 4 5] | Associated page-rank share-> 0.029768
+
+Adjacency list-> [0 2 3 5 6 8] | Associated page-rank share-> 0.023314
+
+Adjacency list-> [0 1 4 5 8] | Associated page-rank share-> 0.028437
+
+Adjacency list-> [1 2 4 5 7 9] | Associated page-rank share-> 0.017587
+
+Adjacency list-> [2 3 0 5] | Associated page-rank share-> 0.037095
+
+Adjacency list-> [4 1 0 2 3 7] | Associated page-rank share-> 0.023565
+
+Adjacency list-> [1 4 8] | Associated page-rank share-> 0.016799
+
+Adjacency list-> [1 5 4 3] | Associated page-rank share-> 0.012491
+
+Adjacency list-> [2 4 6 1] | Associated page-rank share-> 0.018319
+
+Adjacency list-> [3 4 0] | Associated page-rank share-> 0.009978
+
+REDUCER ITERATION -> 9 
+
+Obtained convergence after 9 iteration, here final results: 
+
+Nodo: 0, PageRank: 0.119030
+Nodo: 1, PageRank: 0.139920
+Nodo: 2, PageRank: 0.142200
+Nodo: 3, PageRank: 0.105476
+Nodo: 4, PageRank: 0.148402
+Nodo: 5, PageRank: 0.141387
+Nodo: 6, PageRank: 0.050388
+Nodo: 7, PageRank: 0.049979
+Nodo: 8, PageRank: 0.073268
+Nodo: 9, PageRank: 0.029949
+Page rank algorithm run is done, bye bye
+----------------------------------------------------

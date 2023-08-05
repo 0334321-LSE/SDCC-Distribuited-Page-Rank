@@ -1,4 +1,5 @@
-1) Modify the project, use RPC to able the communication between master and workers OK
-2) Fix various log output
+1) Modify the project, use RPC to able the communication between master and workers. OK
+2) Fix various log output, instead of printing on log print the output on file
+2.1) Fix printed arrows
 3) Add clean up phase
-4) Try to make the program work with docker on differnt container
+4) Try to make the program work with docker on different container

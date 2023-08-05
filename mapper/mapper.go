@@ -19,7 +19,7 @@ func (mapper *Mapper) Map(ctx context.Context, input *MapperInput) (*MapperOutpu
 	if numOutLinks > 0 {
 		pagerankShare := input.PageRank / numOutLinks
 
-		log.Printf("Share: %f for nodes: %s\n", pagerankShare, input.GetAdjacencyList())
+		log.Printf("Share: %f for nodes: %v\n", pagerankShare, input.GetAdjacencyList())
 
 		return &MapperOutput{
 			PageRankShare: pagerankShare,
@@ -27,7 +27,7 @@ func (mapper *Mapper) Map(ctx context.Context, input *MapperInput) (*MapperOutpu
 		}, nil
 
 	} else {
-		//If here node has zero out-links
+		//If here, node has zero out-links
 		zero := 0.0
 		return &MapperOutput{
 			PageRankShare: float32(zero),

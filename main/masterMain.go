@@ -11,6 +11,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"log"
+	"os"
 	"time"
 )
 
@@ -29,6 +30,9 @@ func main() {
 	numNodes := len(graph)
 	convergence := false
 	iteration := 0
+
+	logMessage := fmt.Sprintf("\n%s \n- Starting pagerank algorithm -\n", time.Now().Format("2006-01-02 15:04:05"))
+	writeOnLog(logMessage)
 
 	for !convergence || iteration == constants.MaxIteration {
 		func() {
@@ -52,6 +56,8 @@ func main() {
 			}(conn)
 
 			// Connection with MapperClient at port 9000, for each node launch MAP job
+			logMessage = fmt.Sprintf("\nMAPPER ITERATION -> %d \n", iteration)
+			writeOnLog(logMessage)
 			mapperConnection := mapper.NewMapperClient(conn)
 			for _, node := range graph {
 				mapperInput := mapper.MapperInput{
@@ -67,10 +73,13 @@ func main() {
 				if err != nil {
 					log.Fatalf("Error when calling Map function: %s", err)
 				}
-				log.Printf("\nAdjacency: %s Page-rank share: %f\n", mapperOutput.GetAdjacencyList(), mapperOutput.GetPageRankShare())
+				logMessage = fmt.Sprintf("\nAdjacency list-> %v | Associated page-rank share-> %f\n", mapperOutput.GetAdjacencyList(), mapperOutput.GetPageRankShare())
+				writeOnLog(logMessage)
 			}
 
 			//----- REDUCER -----
+			logMessage = fmt.Sprintf("\nREDUCER ITERATION -> %d \n", iteration)
+			writeOnLog(logMessage)
 			// Create a grpc client connection with port 9001 localhost
 			conn2, err := grpc.Dial(":9001", grpc.WithTransportCredentials(insecure.NewCredentials()))
 			if err != nil {
@@ -110,18 +119,52 @@ func main() {
 
 	// Print final results
 	if convergence {
-		fmt.Printf("Obtained convergence after %d iteration, here final results: \n", iteration)
+		log.Printf("\nObtained convergence after %d iteration, here final results: \n", iteration)
+		logMessage = fmt.Sprintf("\nObtained convergence after %d iteration, here final results: \n", iteration)
+		writeOnLog(logMessage)
+
 	} else {
-		fmt.Println("Convergence isn't obtained try to do more iterations")
+		log.Print("\nConvergence isn't obtained try to do more iterations")
+		writeOnLog("\nConvergence isn't obtained try to do more iterations")
+
 	}
 	pageRankSum := 0.0
 	for _, node := range graph {
-		fmt.Printf("Nodo: %s, PageRank: %f\n", node.ID, node.PageRank)
+		log.Printf("\nNodo: %d, PageRank: %f", node.ID, node.PageRank)
+		logMessage = fmt.Sprintf("\nNodo: %d, PageRank: %f", node.ID, node.PageRank)
+		writeOnLog(logMessage)
 		pageRankSum += node.PageRank
 	}
-	fmt.Println("Sums of pageRank values: ", pageRankSum)
+
+	log.Print("\n--Consistency check--\nSum of pageRank values: ", pageRankSum)
 
 	models.PlotGraphByPageRank(graph)
+	writeOnLog("\nPage rank algorithm run is done, bye bye\n")
+	writeOnLog("----------------------------------------------------")
+
 	elapsed := time.Since(start)
-	log.Printf("PageRank algorithm tooks: %s", elapsed)
+	log.Printf("\nPageRank algorithm tooks: %s", elapsed)
+}
+
+func writeOnLog(logMessage string) {
+	// Open the file in append mod
+	file, err := os.OpenFile("log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatalf("Impossible to open log file: %v", err)
+		return
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Fatalf("Impossibile to close log file: %v", err)
+		}
+	}(file)
+
+	// Write into the log
+	_, err = file.WriteString(logMessage)
+	if err != nil {
+		log.Fatalf("Impossible to write on log: %v", err)
+		return
+	}
+
 }

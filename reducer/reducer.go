@@ -25,7 +25,7 @@ func (reducer *Reducer) Reduce(ctx context.Context, input *ReducerInput) (*Reduc
 		}
 
 		newPageRank := float32((1.0-constants.DampingFactor)/float64(input.GraphSize)) + constants.DampingFactor*accumulator
-		log.Printf("NodeID: %s evaluated page rank: %f\n", input.NodeId, newPageRank)
+		log.Printf("\nNodeID: %d -> evaluated page rank: %f", input.NodeId, newPageRank)
 
 		return &ReducerOutput{
 			NodeId:       input.NodeId,

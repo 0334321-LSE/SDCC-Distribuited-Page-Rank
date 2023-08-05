@@ -8,6 +8,7 @@ import (
 	"math"
 	"math/rand"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -244,11 +245,11 @@ func plotGraph(graph map[int][]int) {
 	}
 	// Salva l'immagine come file PNG.
 	if err := dc.SavePNG("graph.png"); err != nil {
-		fmt.Println("Errore durante il salvataggio del grafico:", err)
+		log.Fatalf("Error during the saving %v", err)
 		return
 	}
 
-	fmt.Println("Grafico salvato come graph.png")
+	log.Printf("Graph saved ad graph.png")
 }
 
 // writeAdjacencyListToFile scrive la lista di adiacenza del grafo su un file di testo.
@@ -282,10 +283,15 @@ func CreateRandomGraph(numNodes int, edgesToAttach int, seed int64) map[int][]in
 	// Generate graph by using Barabasi-Albert.
 	graph := BarabasiAlbertGraph(numNodes, edgesToAttach, seed)
 
-	// Print to monitor the adjacency list
+	keys := make([]int, 0, len(graph))
+	for k := range graph {
+		keys = append(keys, k)
+	}
+	sort.Ints(keys)
+	// Print on the monitor the adjacency list
 	log.Printf("\n-Adjacency list-\n")
-	for node, neighbors := range graph {
-		log.Printf("%d -> %v\n", node, neighbors)
+	for _, k := range keys {
+		log.Printf("%d -> %v\n", k, graph[k])
 	}
 
 	// Save the list into a txt file.
