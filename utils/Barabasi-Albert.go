@@ -46,7 +46,7 @@ func BarabasiAlbertGraph(nodes, edgesToAttach int, seed int64) map[int][]int {
 			// Verifica se l'arco esiste già prima di aggiungerlo al grafo.
 			if !hasEdge(graph, i, maxNode) {
 				// Decide casualmente se aggiungere l'arco in modo unidirezionale o bidirezionale.
-				if rand.Float64() < 0.5 {
+				if rand.Float64() < 0.7 {
 					graph[i] = append(graph[i], maxNode)
 				} else {
 					graph[i] = append(graph[i], maxNode)
@@ -57,6 +57,11 @@ func BarabasiAlbertGraph(nodes, edgesToAttach int, seed int64) map[int][]int {
 				degreeSum[i]++
 				degreeSum[maxNode]++
 			}
+		}
+
+		// Aggiungi la possibilità che il nodo non abbia archi uscenti.
+		if rand.Float64() < 0.3 { // Ad esempio, 20% di probabilità.
+			graph[i] = []int{}
 		}
 	}
 
@@ -94,7 +99,6 @@ func hasEdge(graph map[int][]int, node1, node2 int) bool {
 
 // plotGraph genera un grafico con nodi colorati con i numeri dei nodi all'interno dei cerchi e archi senza frecce. Lo salva come immagine PNG.
 func plotGraph(graph map[int][]int) {
-	//TODO  try to understand why doesn't plot well all the arrows
 	rand.Seed(42) // Imposta un seed fisso per avere la stessa disposizione dei nodi ad ogni esecuzione.
 
 	dc := gg.NewContext(1240, 1754) // Dimensioni in pixel per un foglio A4 verticale (210 x 297 mm a 300 dpi).
@@ -118,10 +122,9 @@ func plotGraph(graph map[int][]int) {
 			maxDegree = degree
 		}
 	}
-
+	nodeDegree := 6
 	for i := 0; i < len(graph); i++ {
 		node := i
-		neighbors := graph[i]
 		// Genera una posizione casuale per il nodo.
 		for {
 			x := rand.Float64() * 1240 // Valore casuale tra 0 e 1240 (larghezza del canvas).
@@ -148,8 +151,7 @@ func plotGraph(graph map[int][]int) {
 			}
 		}
 
-		// Calcola il raggio proporzionale al grado del nodo.
-		nodeDegree := len(neighbors)
+		// Fissa una dimensione del raggio
 		radius := float64(5 + nodeDegree*40/maxDegree) // Scala il raggio in base al grado massimo.
 
 		// Genera un colore chiaro per il nodo.
@@ -198,8 +200,8 @@ func plotGraph(graph map[int][]int) {
 			distance := math.Sqrt(dx*dx + dy*dy)
 
 			// Calcola i punti di intersezione tra l'arco e il bordo dei cerchi dei nodi.
-			radius1 := float64(5 + len(graph[node])*40/maxDegree)
-			radius2 := float64(5 + len(graph[neighbor])*40/maxDegree)
+			radius1 := float64(5 + nodeDegree*40/maxDegree)
+			radius2 := float64(5 + nodeDegree*40/maxDegree)
 			intersectX1 := x1 + (dx/distance)*radius1
 			intersectY1 := y1 + (dy/distance)*radius1
 			intersectX2 := x2 - (dx/distance)*radius2

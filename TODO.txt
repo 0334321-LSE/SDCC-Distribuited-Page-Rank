@@ -1,5 +1,6 @@
 1) Modify the project, use RPC to able the communication between master and workers. OK
-2) Fix various log output, instead of printing on log print the output on file
+2) Fix various log output, instead of printing on log print the output on file OK
 2.1) Fix printed arrows
-3) Add clean up phase
+3) Add clean up phase, to deal with random jump factor and sinks. Add the mass loss due to sinks
+to pageRank formula. OK
 4) Try to make the program work with docker on different container

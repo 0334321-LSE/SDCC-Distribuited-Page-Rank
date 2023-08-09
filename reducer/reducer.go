@@ -33,7 +33,22 @@ func (reducer *Reducer) Reduce(ctx context.Context, input *ReducerInput) (*Reduc
 		}, nil
 	} else {
 
-		return nil, errors.New("Input isn't valid")
+		return nil, errors.New("input isn't valid")
 	}
 
+}
+
+// ReduceCleanUp -> use the cleanUp formula to fix page rank value
+func (reducer *Reducer) ReduceCleanUp(ctx context.Context, input *ReducerCleanUpInput) (*ReducerOutput, error) {
+	if input != nil {
+		massShares := input.SinkMass / float32(input.GraphSize)
+		newPageRank := float32((1.0-constants.DampingFactor)/float64(input.GraphSize)) + constants.DampingFactor*(input.CurrentPageRank+massShares)
+		return &ReducerOutput{
+			NodeId:       input.NodeId,
+			NewRankValue: newPageRank,
+		}, nil
+	} else {
+
+		return nil, errors.New("input isn't valid")
+	}
 }

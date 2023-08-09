@@ -13,8 +13,16 @@ message MapperOutput {
   repeated int32 adjacency_list = 2;
 }
 
+message CleanUpInput {
+  float page_rank = 1;
+  repeated int32 adjacency_list = 2;
+}
+
+message CleanUpOutput {
+  float sink_mass = 1;
+}
 
 service Mapper {
   rpc Map(MapperInput) returns (MapperOutput);
-  //TODO  rpc CleanUp() returns ()
+  rpc CleanUp(CleanUpInput) returns (CleanUpOutput);
 }

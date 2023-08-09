@@ -9,10 +9,20 @@ message ReducerInput{
   int32 graph_size = 3;
 }
 
+message ReducerCleanUpInput{
+  int32 node_id = 1;
+  float current_page_rank = 2;
+  int32 graph_size = 3;
+  float sink_mass = 4;
+}
+
 message ReducerOutput {
   int32 node_id = 1;
   float new_rank_value = 2;
 }
+
+
 service Reducer{
   rpc Reduce(ReducerInput) returns (ReducerOutput);
+  rpc ReduceCleanUp(ReducerCleanUpInput) returns(ReducerOutput);
 }

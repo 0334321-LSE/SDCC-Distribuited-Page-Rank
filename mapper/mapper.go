@@ -35,3 +35,20 @@ func (mapper *Mapper) Map(ctx context.Context, input *MapperInput) (*MapperOutpu
 		}, nil
 	}
 }
+
+// CleanUp -> to manage sinks and random jump factor
+func (mapper *Mapper) CleanUp(ctx context.Context, input *CleanUpInput) (*CleanUpOutput, error) {
+	numOutLinks := float32(len(input.AdjacencyList))
+	if numOutLinks == 0 {
+		log.Printf("Sink finded")
+		return &CleanUpOutput{
+			SinkMass: input.PageRank,
+		}, nil
+	} else {
+		//If here, node has out-links, not interesting in clean-up phase
+		zero := 0.0
+		return &CleanUpOutput{
+			SinkMass: float32(zero),
+		}, nil
+	}
+}

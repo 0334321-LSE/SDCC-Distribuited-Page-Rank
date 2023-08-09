@@ -24,24 +24,25 @@ func main() {
 		fmt.Println("Something went wrong during file opening, aborting")
 		return
 	}
-	var oldPageRank []float64
+	var oldPageRankList []float64
 	var newPageRankList []float64
 
 	numNodes := len(graph)
 	convergence := false
 	iteration := 0
 
-	logMessage := fmt.Sprintf("\n%s \n- Starting pagerank algorithm -\n", time.Now().Format("2006-01-02 15:04:05"))
+	logMessage := fmt.Sprintf("\n%s \n- Starting pagerank algorithm -", time.Now().Format("2006-01-02 15:04:05"))
 	writeOnLog(logMessage)
 
 	for !convergence || iteration == constants.MaxIteration {
 		func() {
 			iteration++
 			aggregatePageRankShares := make(map[int][]float32)
+			sinkMass := 0.0
 			log.Printf("\nIteration number: %d", iteration)
-			oldPageRank = models.ListOfPageRank(graph)
+			oldPageRankList = models.ListOfPageRank(graph)
 
-			//----- MAPPER -----
+			//----- MAPPER -> MAP -----
 			// Create a grpc client connection with port 9000 localhost
 			var conn *grpc.ClientConn
 			conn, err := grpc.Dial(":9000", grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -56,7 +57,7 @@ func main() {
 			}(conn)
 
 			// Connection with MapperClient at port 9000, for each node launch MAP job
-			logMessage = fmt.Sprintf("\nMAPPER ITERATION -> %d \n", iteration)
+			logMessage = fmt.Sprintf("\n\nITERATION -> %d", iteration)
 			writeOnLog(logMessage)
 			mapperConnection := mapper.NewMapperClient(conn)
 			for _, node := range graph {
@@ -73,13 +74,9 @@ func main() {
 				if err != nil {
 					log.Fatalf("Error when calling Map function: %s", err)
 				}
-				logMessage = fmt.Sprintf("\nAdjacency list-> %v | Associated page-rank share-> %f\n", mapperOutput.GetAdjacencyList(), mapperOutput.GetPageRankShare())
-				writeOnLog(logMessage)
 			}
 
-			//----- REDUCER -----
-			logMessage = fmt.Sprintf("\nREDUCER ITERATION -> %d \n", iteration)
-			writeOnLog(logMessage)
+			//----- REDUCER -> REDUCE -----
 			// Create a grpc client connection with port 9001 localhost
 			conn2, err := grpc.Dial(":9001", grpc.WithTransportCredentials(insecure.NewCredentials()))
 			if err != nil {
@@ -109,23 +106,91 @@ func main() {
 				node.PageRank = float64(reducerOutput.NewRankValue)
 			}
 
+			//----- CLEAN UP PHASE -----
+
+			//----- MAPPER-> CLEAN UP -----
+			// Create a grpc client connection with port 9000 localhost
+			conn, err = grpc.Dial(":9000", grpc.WithTransportCredentials(insecure.NewCredentials()))
+			if err != nil {
+				log.Fatalf("Could not connect: %s", err)
+			}
+			defer func(conn *grpc.ClientConn) {
+				err := conn.Close()
+				if err != nil {
+					log.Fatalf("Something went wrong during connection closing %v", err)
+				}
+			}(conn)
+
+			mapperConnection = mapper.NewMapperClient(conn)
+			for _, node := range graph {
+				mapperInput := mapper.CleanUpInput{
+					PageRank:      float32(node.PageRank),
+					AdjacencyList: models.GetOutLinks(node),
+				}
+				//Sums sink's mass
+				cleanUpOutput, err := mapperConnection.CleanUp(context.Background(), &mapperInput)
+				sinkMass += float64(cleanUpOutput.SinkMass)
+				if err != nil {
+					log.Fatalf("Error when calling Map function: %s", err)
+				}
+			}
+
+			//----- REDUCER -> REDUCE-CLEANUP -----
+			// Create a grpc client connection with port 9001 localhost
+			conn2, err = grpc.Dial(":9001", grpc.WithTransportCredentials(insecure.NewCredentials()))
+			if err != nil {
+				log.Fatalf("Could not connect: %s", err)
+			}
+			defer func(conn2 *grpc.ClientConn) {
+				err := conn2.Close()
+				if err != nil {
+					log.Fatalf("Something went wrong during connection closing %v", err)
+				}
+			}(conn2)
+
+			// Connection with ReducerClient at port 9001, for each node launch REDUCE-CLEANUP-job
+			reducerConnection = reducer.NewReducerClient(conn2)
+			for _, node := range graph {
+				reducerCleanUpInput := reducer.ReducerCleanUpInput{
+					NodeId:          int32(node.ID),
+					CurrentPageRank: float32(node.PageRank),
+					GraphSize:       int32(numNodes),
+					SinkMass:        float32(sinkMass),
+				}
+				reducerOutput, err := reducerConnection.ReduceCleanUp(context.Background(), &reducerCleanUpInput)
+				if err != nil {
+					log.Fatalf("Error when calling Reduce function: %s", err)
+				}
+				//Update node page rank value
+				node.PageRank = float64(reducerOutput.NewRankValue)
+			}
+
+			//Get new page rank to check the differences between the old ones
 			newPageRankList = models.ListOfPageRank(graph)
 
+			i := 0
+			//Save on the log intermediate update
+			for _, nodePageRank := range newPageRankList {
+				writeOnLog(fmt.Sprintf("\nNode %d -> PageRank %f", i, nodePageRank))
+				i++
+			}
+
 			// Check the convergence of the algorithm
-			convergence = models.Convergence(oldPageRank, newPageRankList)
+			convergence = models.Convergence(oldPageRankList, newPageRankList)
+
 		}()
 
 	}
 
 	// Print final results
 	if convergence {
-		log.Printf("\nObtained convergence after %d iteration, here final results: \n", iteration)
-		logMessage = fmt.Sprintf("\nObtained convergence after %d iteration, here final results: \n", iteration)
+		log.Printf("\n\nObtained convergence after %d iteration, here final results: ", iteration)
+		logMessage = fmt.Sprintf("\n\nObtained convergence after %d iteration, here final results: ", iteration)
 		writeOnLog(logMessage)
 
 	} else {
-		log.Print("\nConvergence isn't obtained try to do more iterations")
-		writeOnLog("\nConvergence isn't obtained try to do more iterations")
+		log.Print("\n\nConvergence isn't obtained try to do more iterations")
+		writeOnLog("\n\nConvergence isn't obtained try to do more iterations")
 
 	}
 	pageRankSum := 0.0
@@ -137,9 +202,9 @@ func main() {
 	}
 
 	log.Print("\n--Consistency check--\nSum of pageRank values: ", pageRankSum)
-
+	writeOnLog(fmt.Sprintf("\n\n--Consistency check--\nSum of pageRank values: %f", pageRankSum))
 	models.PlotGraphByPageRank(graph)
-	writeOnLog("\nPage rank algorithm run is done, bye bye\n")
+	writeOnLog("\n\nPage rank algorithm run is done, bye bye\n")
 	writeOnLog("----------------------------------------------------")
 
 	elapsed := time.Since(start)

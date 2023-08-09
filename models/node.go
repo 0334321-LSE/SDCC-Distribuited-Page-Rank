@@ -46,31 +46,6 @@ func ListOfPageRank(list []*Node) []float64 {
 	return pageRankList
 }
 
-/*// UpdatePageRanks -> take the result from reducer and update PageRank values for each node
-func UpdatePageRanks(nodeList []*Node, result <-chan string) {
-
-	//Map contains pageRanks for each node
-	var pageRankMap map[int]float64
-	pageRankMap = make(map[int]float64)
-
-	// Obtains page rank for each node
-	for line := range result {
-		//Divides row into nodeID, pageRankValue and save it into pageRankMap
-		lineParts := strings.Split(line, "\t")
-		node := lineParts[0]
-		nodeID, err := strconv.Atoi(node)
-		if err != nil {
-			log.Fatalf("An error occured %v", err)
-		}
-		linePagerankValue, _ := strconv.ParseFloat(lineParts[1], 64)
-		pageRankMap[nodeID] = linePagerankValue
-	}
-	// Then update nodeList
-	for _, node := range nodeList {
-		node.PageRank = pageRankMap[node.ID]
-	}
-}*/
-
 // GetOutLinks -> return out-links of a node in int32 format
 func GetOutLinks(node *Node) []int32 {
 	var outLinks []int32
@@ -197,7 +172,7 @@ func PlotGraphByPageRank(nodes []*Node) {
 		return
 	}
 
-	fmt.Println("Grafico salvato come graph.png")
+	fmt.Println("Graph with page ranks saved as PR-Graph.png")
 }
 
 // findNodeByID -> as the name says ...
