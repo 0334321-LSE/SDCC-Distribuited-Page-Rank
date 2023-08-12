@@ -17,7 +17,7 @@ import (
 
 func main() {
 	start := time.Now()
-	utils.CreateRandomGraph(10, 5, 3)
+	utils.CreateRandomGraph(20, 5, 3)
 
 	graph := utils.Convert(constants.GraphPath)
 	if graph == nil {
