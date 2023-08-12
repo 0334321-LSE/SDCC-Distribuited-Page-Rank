@@ -3,4 +3,5 @@
 2.1) Fix printed arrows
 3) Add clean up phase, to deal with random jump factor and sinks. Add the mass loss due to sinks
 to pageRank formula. OK
-4) Try to make the program work with docker on different container
+4) Try to make the program work with docker on different container. OK
+5) Make the number of container a parameter, manage the load balancing etc...
