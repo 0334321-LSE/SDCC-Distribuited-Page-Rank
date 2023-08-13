@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"text/template"
 )
 
@@ -67,7 +68,7 @@ networks:
 `, i+1, 10000+i, 10000+i)
 	}
 
-	outputFile, err := os.Create("docker-compose-generated.yml")
+	outputFile, err := os.Create("docker-compose.yml")
 	if err != nil {
 		return err
 	}
@@ -107,12 +108,12 @@ func main() {
 		return
 	}
 
-	/*	cmd := exec.Command("docker-compose", "up")
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		err = cmd.Run()
-		if err != nil {
-			fmt.Println("Error running docker-compose:", err)
-			return
-		}*/
+	cmd := exec.Command("docker-compose", "up")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err = cmd.Run()
+	if err != nil {
+		fmt.Println("Error running docker-compose:", err)
+		return
+	}
 }

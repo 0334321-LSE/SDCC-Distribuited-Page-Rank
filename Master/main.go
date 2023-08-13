@@ -6,19 +6,19 @@ import (
 	"Master/models"
 	"Master/reducer"
 	"Master/utils"
+	"container/ring"
 	"context"
 	"fmt"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"log"
-	"os"
 	"time"
 )
 
 func main() {
 	start := time.Now()
 	logMessage := fmt.Sprintf("\n%s \n- Starting pagerank algorithm -", time.Now().Format("2006-01-02 15:04:05"))
-	writeOnLog(logMessage)
+	utils.WriteOnLog(logMessage)
 
 	utils.CreateRandomGraph(20, 5, 5)
 
@@ -34,8 +34,18 @@ func main() {
 	convergence := false
 	iteration := 0
 
-	mapperAddress := "app-mapper:9000"
-	reducerAddress := "app-reducer:9001"
+	//Obtain configuration parameter
+	var config utils.Config
+	utils.ReadJsonConfig(config)
+	var mapperRing = ring.New(config.NumMapper)
+	var reducerRing = ring.New(config.NumReducer)
+
+	for i := 0; i < config.NumReducer; i++ {
+		mapperRing.Value = fmt.Sprintf("app-mapper-%d:%d", i+1, 9000+i)
+	}
+	for i := 0; i < config.NumReducer; i++ {
+		reducerRing.Value = fmt.Sprintf("app-reducer-%d:%d", i+1, 10000+i)
+	}
 
 	for !convergence || iteration == constants.MaxIteration {
 		func() {
@@ -46,24 +56,39 @@ func main() {
 			oldPageRankList = models.ListOfPageRank(graph)
 
 			//----- MAPPER -> MAP -----
-			// Create a grpc client connection with port 9000 localhost
-			var conn *grpc.ClientConn
-			conn, err := grpc.Dial(mapperAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
-			if err != nil {
-				log.Fatalf("Could not connect: %s", err)
-			}
-			defer func(conn *grpc.ClientConn) {
-				err := conn.Close()
-				if err != nil {
-					log.Fatalf("Something went wrong during connection closing %v", err)
-				}
-			}(conn)
+			// With round-robin policies call each container
 
-			// Connection with MapperClient at port 9000, for each node launch MAP job
+			var conn map[int][]*grpc.ClientConn
+			var conn2 map[int][]*grpc.ClientConn
+			var err error
+			var connection *grpc.ClientConn
+
+			// Initialize connection with each container for Mapper task
+			for i := 0; i < mapperRing.Len(); i++ {
+				connection, err = grpc.Dial(mapperRing.Value.(string), grpc.WithTransportCredentials(insecure.NewCredentials()))
+				conn[i] = append(conn[i], connection)
+				//Next container
+				mapperRing = mapperRing.Next()
+				if err != nil {
+					log.Fatalf("Could not connect: %s", err)
+				}
+				defer func(conn *grpc.ClientConn) {
+					err := conn.Close()
+					if err != nil {
+						log.Fatalf("Something went wrong during connection closing %v", err)
+					}
+				}(conn[i][0])
+			}
+
 			logMessage = fmt.Sprintf("\n\nITERATION -> %d", iteration)
-			writeOnLog(logMessage)
-			mapperConnection := mapper.NewMapperClient(conn)
-			for _, node := range graph {
+			utils.WriteOnLog(logMessage)
+
+			for m, node := range graph {
+				//M % N.Container to establish which one must be chosen (round-robin)
+				chosen := m % mapperRing.Len()
+				// Connection with MapperClient on ports 900X, for each node launch MAP job
+				mapperConnection := mapper.NewMapperClient(conn[chosen][0])
+				// Now is connected with I-TH container, launch map task
 				mapperInput := mapper.MapperInput{
 					PageRank:      float32(node.PageRank),
 					AdjacencyList: models.GetOutLinks(node),
@@ -80,22 +105,30 @@ func main() {
 			}
 
 			//----- REDUCER -> REDUCE -----
-			// Create a grpc client connection with port 9001 localhost
-			conn2, err := grpc.Dial(reducerAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
-			if err != nil {
-				log.Fatalf("Could not connect: %s", err)
-			}
-			defer func(conn2 *grpc.ClientConn) {
-				err := conn2.Close()
+
+			// Initialize connection with each container for Reducer task
+			for i := 0; i < reducerRing.Len(); i++ {
+				connection, err = grpc.Dial(reducerRing.Value.(string), grpc.WithTransportCredentials(insecure.NewCredentials()))
+				conn2[i] = append(conn[i], connection)
+				//Next container
+				reducerRing = reducerRing.Next()
 				if err != nil {
-					log.Fatalf("Something went wrong during connection closing %v", err)
+					log.Fatalf("Could not connect: %s", err)
 				}
-			}(conn2)
+				defer func(conn *grpc.ClientConn) {
+					err := conn.Close()
+					if err != nil {
+						log.Fatalf("Something went wrong during connection closing %v", err)
+					}
+				}(conn2[i][0])
+			}
 
-			// Connection with ReducerClient at port 9001, for each node launch REDUCE-job
-			reducerConnection := reducer.NewReducerClient(conn2)
-
-			for _, node := range graph {
+			for m, node := range graph {
+				//M % N.Container to establish which one must be chosen (round-robin)
+				chosen := m % reducerRing.Len()
+				// Connection with ReducerClient on ports 10000X, for each node launch REDUCE-job
+				reducerConnection := reducer.NewReducerClient(conn2[chosen][0])
+				// Now is connected with I-TH container, launch map task
 				reducerInput := reducer.ReducerInput{
 					NodeId:         int32(node.ID),
 					PageRankShares: aggregatePageRankShares[node.ID],
@@ -112,20 +145,10 @@ func main() {
 			//----- CLEAN UP PHASE -----
 
 			//----- MAPPER-> CLEAN UP -----
-			// Create a grpc client connection with port 9000 localhost
-			conn, err = grpc.Dial(mapperAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
-			if err != nil {
-				log.Fatalf("Could not connect: %s", err)
-			}
-			defer func(conn *grpc.ClientConn) {
-				err := conn.Close()
-				if err != nil {
-					log.Fatalf("Something went wrong during connection closing %v", err)
-				}
-			}(conn)
-
-			mapperConnection = mapper.NewMapperClient(conn)
-			for _, node := range graph {
+			for m, node := range graph {
+				//M % N.Container to establish which one must be chosen (round-robin)
+				chosen := m % mapperRing.Len()
+				mapperConnection := mapper.NewMapperClient(conn[chosen][0])
 				mapperInput := mapper.CleanUpInput{
 					PageRank:      float32(node.PageRank),
 					AdjacencyList: models.GetOutLinks(node),
@@ -139,21 +162,10 @@ func main() {
 			}
 
 			//----- REDUCER -> REDUCE-CLEANUP -----
-			// Create a grpc client connection with port 9001 localhost
-			conn2, err = grpc.Dial(reducerAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
-			if err != nil {
-				log.Fatalf("Could not connect: %s", err)
-			}
-			defer func(conn2 *grpc.ClientConn) {
-				err := conn2.Close()
-				if err != nil {
-					log.Fatalf("Something went wrong during connection closing %v", err)
-				}
-			}(conn2)
-
-			// Connection with ReducerClient at port 9001, for each node launch REDUCE-CLEANUP-job
-			reducerConnection = reducer.NewReducerClient(conn2)
-			for _, node := range graph {
+			for m, node := range graph {
+				//M % N.Container to establish which one must be chosen (round-robin)
+				chosen := m % mapperRing.Len()
+				reducerConnection := reducer.NewReducerClient(conn2[chosen][0])
 				reducerCleanUpInput := reducer.ReducerCleanUpInput{
 					NodeId:          int32(node.ID),
 					CurrentPageRank: float32(node.PageRank),
@@ -174,7 +186,7 @@ func main() {
 			i := 0
 			//Save on the log intermediate update
 			for _, nodePageRank := range newPageRankList {
-				writeOnLog(fmt.Sprintf("\nNode %d -> PageRank %f", i, nodePageRank))
+				utils.WriteOnLog(fmt.Sprintf("\nNode %d -> PageRank %f", i, nodePageRank))
 				i++
 			}
 
@@ -189,50 +201,27 @@ func main() {
 	if convergence {
 		log.Printf("\n\nObtained convergence after %d iteration, here final results: ", iteration)
 		logMessage = fmt.Sprintf("\n\nObtained convergence after %d iteration, here final results: ", iteration)
-		writeOnLog(logMessage)
+		utils.WriteOnLog(logMessage)
 
 	} else {
 		log.Print("\n\nConvergence isn't obtained try to do more iterations")
-		writeOnLog("\n\nConvergence isn't obtained try to do more iterations")
+		utils.WriteOnLog("\n\nConvergence isn't obtained try to do more iterations")
 
 	}
 	pageRankSum := 0.0
 	for _, node := range graph {
 		log.Printf("\nNodo: %d, PageRank: %f", node.ID, node.PageRank)
 		logMessage = fmt.Sprintf("\nNodo: %d, PageRank: %f", node.ID, node.PageRank)
-		writeOnLog(logMessage)
+		utils.WriteOnLog(logMessage)
 		pageRankSum += node.PageRank
 	}
 
 	log.Print("\n--Consistency check--\nSum of pageRank values: ", pageRankSum)
-	writeOnLog(fmt.Sprintf("\n\n--Consistency check--\nSum of pageRank values: %f", pageRankSum))
+	utils.WriteOnLog(fmt.Sprintf("\n\n--Consistency check--\nSum of pageRank values: %f", pageRankSum))
 	models.PlotGraphByPageRank(graph)
-	writeOnLog("\n\nPage rank algorithm run is done, bye bye\n")
-	writeOnLog("----------------------------------------------------")
+	utils.WriteOnLog("\n\nPage rank algorithm run is done, bye bye\n")
+	utils.WriteOnLog("----------------------------------------------------")
 
 	elapsed := time.Since(start)
 	log.Printf("\nPageRank algorithm tooks: %s", elapsed)
-}
-
-func writeOnLog(logMessage string) {
-	// Open the file in append mod
-	file, err := os.OpenFile("./output/log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		log.Fatalf("Impossible to open log file: %v", err)
-		return
-	}
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-			log.Fatalf("Impossibile to close log file: %v", err)
-		}
-	}(file)
-
-	// Write into the log
-	_, err = file.WriteString(logMessage)
-	if err != nil {
-		log.Fatalf("Impossible to write on log: %v", err)
-		return
-	}
-
 }
