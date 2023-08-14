@@ -12,6 +12,8 @@ import (
 type Config struct {
 	NumMapper  int `json:"num_mapper"`
 	NumReducer int `json:"num_reducer"`
+	MapperPN   int `json:"mapper_pn"`
+	ReducerPN  int `json:"reducer_pn"`
 }
 
 func generateDockerCompose(config Config) error {
@@ -48,9 +50,10 @@ networks:
       - "%d:%d"  # Assegna porte univoche ai mapper
     environment:
       - TZ=Europe/Rome
+      - EXPOSED_PORT=%d
     networks:
       - my-network
-`, i+1, 9000+i, 9000+i)
+`, i+1, config.MapperPN+i, config.MapperPN+i, config.MapperPN+i)
 	}
 
 	reducerServices := ""
@@ -59,13 +62,15 @@ networks:
    app-reducer-%d:
     build:
       context: ./Reducer
+
     ports:
       - "%d:%d"  # Assegna porte univoche ai reducer
     environment:
       - TZ=Europe/Rome
+      - EXPOSED_PORT=%d
     networks:
       - my-network
-`, i+1, 10000+i, 10000+i)
+`, i+1, config.ReducerPN+i, config.ReducerPN+i, config.ReducerPN+i)
 	}
 
 	outputFile, err := os.Create("docker-compose.yml")
@@ -108,12 +113,21 @@ func main() {
 		return
 	}
 
-	cmd := exec.Command("docker-compose", "up")
+	cmd := exec.Command("docker-compose", "build")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err = cmd.Run()
 	if err != nil {
-		fmt.Println("Error running docker-compose:", err)
+		fmt.Println("Error running docker-compose build:", err)
+		return
+	}
+
+	cmd = exec.Command("docker-compose", "up")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err = cmd.Run()
+	if err != nil {
+		fmt.Println("Error running docker-compose up:", err)
 		return
 	}
 }

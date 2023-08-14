@@ -2,17 +2,25 @@ package main
 
 import (
 	"Reducer/reducer"
+	"errors"
 	"google.golang.org/grpc"
 	"log"
 	"net"
+	"os"
 )
 
 func main() {
-	lis, err := net.Listen("tcp", ":9001")
-	if err != nil {
-		log.Fatalf("Failed to listen on port 9001 %v", err)
+	// Obtains assigned port on Docker Compose from environment variable
+	port := os.Getenv("EXPOSED_PORT")
+	if port == "" {
+		err := errors.New("failed to obtain port number")
+		log.Fatalf("Failed to obtain port number %v", err)
 	}
-	log.Printf("Listening on port 9001 \n")
+	lis, err := net.Listen("tcp", ":"+port)
+	if err != nil {
+		log.Fatalf("Failed to listen on port %s %v", port, err)
+	}
+	log.Printf("Listening on port %s \n", port)
 
 	reducerServer := reducer.Reducer{}
 
@@ -21,7 +29,7 @@ func main() {
 
 	reducer.RegisterReducerServer(grpcServer, &reducerServer)
 	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("Failed to serve gRPC on port 9001 %v", err)
+		log.Fatalf("Failed to serve gRPC on port %s %v", port, err)
 
 	}
 }

@@ -5,4 +5,5 @@
 to pageRank formula. OK
 4) Try to make the program work with docker on different container. OK
 5) Make the number of container a parameter OK
-6) Manage the load balancing and the request over different container etc...
+6) Manage the load balancing and the request over different container etc OK done by round robin
+7) Understand why doesn't work connection with worker server.

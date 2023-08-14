@@ -1,4 +1,6 @@
 {
     "num_mapper": 6,
-    "num_reducer": 2
+    "num_reducer": 2,
+    "mapper_pn" : 9000,
+    "reducer_pn" : 10000
 }

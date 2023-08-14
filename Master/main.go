@@ -36,15 +36,17 @@ func main() {
 
 	//Obtain configuration parameter
 	var config utils.Config
-	utils.ReadJsonConfig(config)
+	utils.ReadJsonConfig(&config)
 	var mapperRing = ring.New(config.NumMapper)
 	var reducerRing = ring.New(config.NumReducer)
 
-	for i := 0; i < config.NumReducer; i++ {
+	for i := 0; i < config.NumMapper; i++ {
 		mapperRing.Value = fmt.Sprintf("app-mapper-%d:%d", i+1, 9000+i)
+		mapperRing = mapperRing.Next()
 	}
 	for i := 0; i < config.NumReducer; i++ {
 		reducerRing.Value = fmt.Sprintf("app-reducer-%d:%d", i+1, 10000+i)
+		reducerRing = reducerRing.Next()
 	}
 
 	for !convergence || iteration == constants.MaxIteration {
@@ -58,8 +60,8 @@ func main() {
 			//----- MAPPER -> MAP -----
 			// With round-robin policies call each container
 
-			var conn map[int][]*grpc.ClientConn
-			var conn2 map[int][]*grpc.ClientConn
+			conn := make(map[int][]*grpc.ClientConn)
+			conn2 := make(map[int][]*grpc.ClientConn)
 			var err error
 			var connection *grpc.ClientConn
 
