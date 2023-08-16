@@ -10,10 +10,17 @@ import (
 )
 
 type Config struct {
-	NumMapper  int `json:"num_mapper"`
-	NumReducer int `json:"num_reducer"`
-	MapperPN   int `json:"mapper_pn"`
-	ReducerPN  int `json:"reducer_pn"`
+	NumMapper     int     `json:"num_mapper"`
+	NumReducer    int     `json:"num_reducer"`
+	MapperPN      int     `json:"mapper_pn"`
+	ReducerPN     int     `json:"reducer_pn"`
+	DampingFactor float64 `json:"damping_factor"`
+	Epsilon       float64 `json:"epsilon"`
+	GraphPath     string  `json:"graph_path"`
+	MaxIteration  int     `json:"max_iteration"`
+	NumNodes      int     `json:"num_nodes"`
+	EdgesToAttach int     `json:"edges_to_attach"`
+	Seed          int64   `json:"seed"`
 }
 
 func generateDockerCompose(config Config) error {
@@ -25,6 +32,7 @@ services:
       context: ./Master
     volumes:
       - ./output:/Master/output
+      - ./configuration.json:/Master/constants/configuration.json
     environment:
       - TZ=Europe/Rome
     networks:
@@ -62,7 +70,8 @@ networks:
    app-reducer-%d:
     build:
       context: ./Reducer
-
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
     ports:
       - "%d:%d"  # Assegna porte univoche ai reducer
     environment:
@@ -113,16 +122,7 @@ func main() {
 		return
 	}
 
-	cmd := exec.Command("docker-compose", "build")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	err = cmd.Run()
-	if err != nil {
-		fmt.Println("Error running docker-compose build:", err)
-		return
-	}
-
-	cmd = exec.Command("docker-compose", "up")
+	cmd := exec.Command("docker-compose", "up", "--build")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err = cmd.Run()

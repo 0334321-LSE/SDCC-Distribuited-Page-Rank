@@ -28,8 +28,23 @@ func main() {
 	grpcServer := grpc.NewServer()
 
 	reducer.RegisterReducerServer(grpcServer, &reducerServer)
+
+	// Show exposed services
+	func(server *grpc.Server) {
+		services := server.GetServiceInfo()
+		for keys, service := range services {
+			log.Printf("- Nome: %s\n", keys)
+			for _, method := range service.Methods {
+				log.Printf("  Metodo: %s\n", method.Name)
+			}
+			log.Println()
+		}
+	}(grpcServer)
+
+	// Serve
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve gRPC on port %s %v", port, err)
 
 	}
+
 }

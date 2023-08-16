@@ -6,6 +6,7 @@ services:
       context: ./Master
     volumes:
       - ./output:/Master/output
+      - ./configuration.json:/Master/constants/configuration.json
     environment:
       - TZ=Europe/Rome
     networks:
@@ -54,32 +55,11 @@ services:
     networks:
       - my-network
 
-   app-mapper-5:
-    build:
-      context: ./Mapper
-    ports:
-      - "9004:9004"  # Assegna porte univoche ai mapper
-    environment:
-      - TZ=Europe/Rome
-      - EXPOSED_PORT=9004
-    networks:
-      - my-network
-
-   app-mapper-6:
-    build:
-      context: ./Mapper
-    ports:
-      - "9005:9005"  # Assegna porte univoche ai mapper
-    environment:
-      - TZ=Europe/Rome
-      - EXPOSED_PORT=9005
-    networks:
-      - my-network
-
    app-reducer-1:
     build:
       context: ./Reducer
-
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
     ports:
       - "10000:10000"  # Assegna porte univoche ai reducer
     environment:
@@ -91,7 +71,8 @@ services:
    app-reducer-2:
     build:
       context: ./Reducer
-
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
     ports:
       - "10001:10001"  # Assegna porte univoche ai reducer
     environment:

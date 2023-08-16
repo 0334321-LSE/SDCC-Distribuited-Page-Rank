@@ -287,7 +287,8 @@ func writeAdjacencyListToFile(graph map[int][]int, filename string) error {
 
 // CreateRandomGraph -> generate a graph randomly by using Barabasi-Albert algorithm
 func CreateRandomGraph(numNodes int, edgesToAttach int, seed int64) map[int][]int {
-
+	var config constants.Config
+	constants.ReadJsonConfig(&config)
 	// Generate graph by using Barabasi-Albert.
 	graph := BarabasiAlbertGraph(numNodes, edgesToAttach, seed)
 
@@ -304,7 +305,7 @@ func CreateRandomGraph(numNodes int, edgesToAttach int, seed int64) map[int][]in
 	}
 
 	// Save the list into a txt file.
-	if err := writeAdjacencyListToFile(graph, constants.GraphPath); err != nil {
+	if err := writeAdjacencyListToFile(graph, config.GraphPath); err != nil {
 		log.Printf("Error during txt saving: %v\n", err)
 		return nil
 	}

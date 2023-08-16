@@ -16,13 +16,16 @@ import (
 )
 
 func main() {
+	time.Sleep(2 * time.Second)
 	start := time.Now()
+	var config constants.Config
+	constants.ReadJsonConfig(&config)
 	logMessage := fmt.Sprintf("\n%s \n- Starting pagerank algorithm -", time.Now().Format("2006-01-02 15:04:05"))
 	utils.WriteOnLog(logMessage)
 
-	utils.CreateRandomGraph(20, 5, 5)
+	utils.CreateRandomGraph(config.NumNodes, config.EdgesToAttach, config.Seed)
 
-	graph := utils.Convert(constants.GraphPath)
+	graph := utils.Convert(config.GraphPath)
 	if graph == nil {
 		fmt.Println("Something went wrong during file opening, aborting")
 		return
@@ -35,21 +38,20 @@ func main() {
 	iteration := 0
 
 	//Obtain configuration parameter
-	var config utils.Config
-	utils.ReadJsonConfig(&config)
 	var mapperRing = ring.New(config.NumMapper)
 	var reducerRing = ring.New(config.NumReducer)
 
 	for i := 0; i < config.NumMapper; i++ {
-		mapperRing.Value = fmt.Sprintf("app-mapper-%d:%d", i+1, 9000+i)
+		mapperRing.Value = fmt.Sprintf("app-mapper-%d:%d", i+1, config.MapperPN+i)
 		mapperRing = mapperRing.Next()
 	}
+
 	for i := 0; i < config.NumReducer; i++ {
-		reducerRing.Value = fmt.Sprintf("app-reducer-%d:%d", i+1, 10000+i)
+		reducerRing.Value = fmt.Sprintf("app-reducer-%d:%d", i+1, config.ReducerPN+i)
 		reducerRing = reducerRing.Next()
 	}
 
-	for !convergence || iteration == constants.MaxIteration {
+	for !convergence || iteration == config.MaxIteration {
 		func() {
 			iteration++
 			aggregatePageRankShares := make(map[int][]float32)
@@ -60,15 +62,15 @@ func main() {
 			//----- MAPPER -> MAP -----
 			// With round-robin policies call each container
 
-			conn := make(map[int][]*grpc.ClientConn)
-			conn2 := make(map[int][]*grpc.ClientConn)
+			connWithMapper := make(map[int][]*grpc.ClientConn)
+			connWithReducer := make(map[int][]*grpc.ClientConn)
 			var err error
 			var connection *grpc.ClientConn
 
 			// Initialize connection with each container for Mapper task
 			for i := 0; i < mapperRing.Len(); i++ {
 				connection, err = grpc.Dial(mapperRing.Value.(string), grpc.WithTransportCredentials(insecure.NewCredentials()))
-				conn[i] = append(conn[i], connection)
+				connWithMapper[i] = append(connWithMapper[i], connection)
 				//Next container
 				mapperRing = mapperRing.Next()
 				if err != nil {
@@ -79,7 +81,7 @@ func main() {
 					if err != nil {
 						log.Fatalf("Something went wrong during connection closing %v", err)
 					}
-				}(conn[i][0])
+				}(connWithMapper[i][0])
 			}
 
 			logMessage = fmt.Sprintf("\n\nITERATION -> %d", iteration)
@@ -89,7 +91,7 @@ func main() {
 				//M % N.Container to establish which one must be chosen (round-robin)
 				chosen := m % mapperRing.Len()
 				// Connection with MapperClient on ports 900X, for each node launch MAP job
-				mapperConnection := mapper.NewMapperClient(conn[chosen][0])
+				mapperConnection := mapper.NewMapperClient(connWithMapper[chosen][0])
 				// Now is connected with I-TH container, launch map task
 				mapperInput := mapper.MapperInput{
 					PageRank:      float32(node.PageRank),
@@ -102,7 +104,7 @@ func main() {
 					aggregatePageRankShares[int(node)] = append(aggregatePageRankShares[int(node)], mapperOutput.PageRankShare)
 				}
 				if err != nil {
-					log.Fatalf("Error when calling Map function: %s", err)
+					log.Fatalf("Error when calling Map function: %v", err)
 				}
 			}
 
@@ -111,7 +113,7 @@ func main() {
 			// Initialize connection with each container for Reducer task
 			for i := 0; i < reducerRing.Len(); i++ {
 				connection, err = grpc.Dial(reducerRing.Value.(string), grpc.WithTransportCredentials(insecure.NewCredentials()))
-				conn2[i] = append(conn[i], connection)
+				connWithReducer[i] = append(connWithReducer[i], connection)
 				//Next container
 				reducerRing = reducerRing.Next()
 				if err != nil {
@@ -122,14 +124,14 @@ func main() {
 					if err != nil {
 						log.Fatalf("Something went wrong during connection closing %v", err)
 					}
-				}(conn2[i][0])
+				}(connWithReducer[i][0])
 			}
 
 			for m, node := range graph {
 				//M % N.Container to establish which one must be chosen (round-robin)
 				chosen := m % reducerRing.Len()
 				// Connection with ReducerClient on ports 10000X, for each node launch REDUCE-job
-				reducerConnection := reducer.NewReducerClient(conn2[chosen][0])
+				reducerConnection := reducer.NewReducerClient(connWithReducer[chosen][0])
 				// Now is connected with I-TH container, launch map task
 				reducerInput := reducer.ReducerInput{
 					NodeId:         int32(node.ID),
@@ -150,7 +152,7 @@ func main() {
 			for m, node := range graph {
 				//M % N.Container to establish which one must be chosen (round-robin)
 				chosen := m % mapperRing.Len()
-				mapperConnection := mapper.NewMapperClient(conn[chosen][0])
+				mapperConnection := mapper.NewMapperClient(connWithMapper[chosen][0])
 				mapperInput := mapper.CleanUpInput{
 					PageRank:      float32(node.PageRank),
 					AdjacencyList: models.GetOutLinks(node),
@@ -166,8 +168,8 @@ func main() {
 			//----- REDUCER -> REDUCE-CLEANUP -----
 			for m, node := range graph {
 				//M % N.Container to establish which one must be chosen (round-robin)
-				chosen := m % mapperRing.Len()
-				reducerConnection := reducer.NewReducerClient(conn2[chosen][0])
+				chosen := m % reducerRing.Len()
+				reducerConnection := reducer.NewReducerClient(connWithReducer[chosen][0])
 				reducerCleanUpInput := reducer.ReducerCleanUpInput{
 					NodeId:          int32(node.ID),
 					CurrentPageRank: float32(node.PageRank),

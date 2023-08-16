@@ -1,6 +1,13 @@
 {
-    "num_mapper": 6,
+    "num_mapper": 4,
     "num_reducer": 2,
     "mapper_pn" : 9000,
-    "reducer_pn" : 10000
+    "reducer_pn" : 10000,
+    "damping_factor" : 0.85,
+    "epsilon" : 0.0001,
+    "graph_path" : "./output/graph.txt",
+    "max_iteration" : 100,
+    "num_nodes" : 20,
+    "edges_to_attach" : 5,
+    "seed" : 5
 }

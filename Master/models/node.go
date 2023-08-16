@@ -31,7 +31,9 @@ func Convergence(previous []float64, actual []float64) bool {
 // CheckConvergence -> check for a node if the difference between previous and
 // next value of pageRank is less than epsilon constant or not
 func CheckConvergence(previous float64, actual float64) bool {
-	if math.Abs(previous-actual) < constants.Epsilon {
+	var config constants.Config
+	constants.ReadJsonConfig(&config)
+	if float32(math.Abs(previous-actual)) < config.Epsilon {
 		return true
 	}
 	return false
