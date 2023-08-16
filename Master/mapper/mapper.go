@@ -9,8 +9,6 @@ type Mapper struct {
 }
 
 func (mapper *Mapper) mustEmbedUnimplementedMapperServer() {
-	//TODO implement me
-	panic("implement me")
 }
 
 // Map ->  function to evaluate each node contributes

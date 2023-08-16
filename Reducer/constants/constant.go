@@ -9,8 +9,10 @@ import (
 type Config struct {
 	NumMapper     int     `json:"num_mapper"`
 	NumReducer    int     `json:"num_reducer"`
-	MapperPN      int     `json:"mapper_pn"`
-	ReducerPN     int     `json:"reducer_pn"`
+	MapperPn      int     `json:"mapper_pn"`
+	MapperHbPn    int     `json:"mapper_hb_pn"`
+	ReducerPn     int     `json:"reducer_pn"`
+	ReducerHbPn   int     `json:"reducer_hb_pn"`
 	DampingFactor float32 `json:"damping_factor"`
 	Epsilon       float32 `json:"epsilon"`
 	GraphPath     string  `json:"graph_path"`

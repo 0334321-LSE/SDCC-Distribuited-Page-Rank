@@ -15,10 +15,12 @@ services:
     build:
       context: ./Mapper
     ports:
-      - "9000:9000"  # Assegna porte univoche ai mapper
+      - "9001:9001"  # Assegna porte univoche ai Mapper
+      - "50001:50001"  # Porta univoca per servizio di HeartBeat
     environment:
       - TZ=Europe/Rome
-      - EXPOSED_PORT=9000
+      - MAPPER_PORT=9001
+      - HB_PORT=50001
     networks:
       - my-network
 
@@ -26,10 +28,12 @@ services:
     build:
       context: ./Mapper
     ports:
-      - "9001:9001"  # Assegna porte univoche ai mapper
+      - "9002:9002"  # Assegna porte univoche ai Mapper
+      - "50002:50002"  # Porta univoca per servizio di HeartBeat
     environment:
       - TZ=Europe/Rome
-      - EXPOSED_PORT=9001
+      - MAPPER_PORT=9002
+      - HB_PORT=50002
     networks:
       - my-network
 
@@ -37,10 +41,12 @@ services:
     build:
       context: ./Mapper
     ports:
-      - "9002:9002"  # Assegna porte univoche ai mapper
+      - "9003:9003"  # Assegna porte univoche ai Mapper
+      - "50003:50003"  # Porta univoca per servizio di HeartBeat
     environment:
       - TZ=Europe/Rome
-      - EXPOSED_PORT=9002
+      - MAPPER_PORT=9003
+      - HB_PORT=50003
     networks:
       - my-network
 
@@ -48,10 +54,12 @@ services:
     build:
       context: ./Mapper
     ports:
-      - "9003:9003"  # Assegna porte univoche ai mapper
+      - "9004:9004"  # Assegna porte univoche ai Mapper
+      - "50004:50004"  # Porta univoca per servizio di HeartBeat
     environment:
       - TZ=Europe/Rome
-      - EXPOSED_PORT=9003
+      - MAPPER_PORT=9004
+      - HB_PORT=50004
     networks:
       - my-network
 
@@ -61,10 +69,12 @@ services:
     volumes:
       - ./configuration.json:/Reducer/constants/configuration.json
     ports:
-      - "10000:10000"  # Assegna porte univoche ai reducer
+      - "10001:10001"  # Assegna porte univoche ai reducer
+      - "51001:51001"  # Porta univoca per servizio di HeartBeat
     environment:
       - TZ=Europe/Rome
-      - EXPOSED_PORT=10000
+      - REDUCER_PORT=10001
+      - HB_PORT=51001
     networks:
       - my-network
 
@@ -74,10 +84,12 @@ services:
     volumes:
       - ./configuration.json:/Reducer/constants/configuration.json
     ports:
-      - "10001:10001"  # Assegna porte univoche ai reducer
+      - "10002:10002"  # Assegna porte univoche ai reducer
+      - "51002:51002"  # Porta univoca per servizio di HeartBeat
     environment:
       - TZ=Europe/Rome
-      - EXPOSED_PORT=10001
+      - REDUCER_PORT=10002
+      - HB_PORT=51002
     networks:
       - my-network
 

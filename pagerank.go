@@ -10,17 +10,19 @@ import (
 )
 
 type Config struct {
-	NumMapper     int     `json:"num_mapper"`
-	NumReducer    int     `json:"num_reducer"`
-	MapperPN      int     `json:"mapper_pn"`
-	ReducerPN     int     `json:"reducer_pn"`
-	DampingFactor float64 `json:"damping_factor"`
-	Epsilon       float64 `json:"epsilon"`
-	GraphPath     string  `json:"graph_path"`
-	MaxIteration  int     `json:"max_iteration"`
-	NumNodes      int     `json:"num_nodes"`
-	EdgesToAttach int     `json:"edges_to_attach"`
-	Seed          int64   `json:"seed"`
+	NumMapper          int     `json:"num_mapper"`
+	NumReducer         int     `json:"num_reducer"`
+	MapperPN           int     `json:"mapper_pn"`
+	MapperHeartBeatPN  int     `json:"mapper_hb_pn"`
+	ReducerPN          int     `json:"reducer_pn"`
+	ReducerHeartBeatPN int     `json:"reducer_hb_pn"`
+	DampingFactor      float64 `json:"damping_factor"`
+	Epsilon            float64 `json:"epsilon"`
+	GraphPath          string  `json:"graph_path"`
+	MaxIteration       int     `json:"max_iteration"`
+	NumNodes           int     `json:"num_nodes"`
+	EdgesToAttach      int     `json:"edges_to_attach"`
+	Seed               int64   `json:"seed"`
 }
 
 func generateDockerCompose(config Config) error {
@@ -49,23 +51,25 @@ networks:
 	}
 
 	mapperServices := ""
-	for i := 0; i < config.NumMapper; i++ {
+	for i := 1; i <= config.NumMapper; i++ {
 		mapperServices += fmt.Sprintf(`
    app-mapper-%d:
     build:
       context: ./Mapper
     ports:
-      - "%d:%d"  # Assegna porte univoche ai mapper
+      - "%d:%d"  # Assegna porte univoche ai Mapper
+      - "%d:%d"  # Porta univoca per servizio di HeartBeat
     environment:
       - TZ=Europe/Rome
-      - EXPOSED_PORT=%d
+      - MAPPER_PORT=%d
+      - HB_PORT=%d
     networks:
       - my-network
-`, i+1, config.MapperPN+i, config.MapperPN+i, config.MapperPN+i)
+`, i, config.MapperPN+i, config.MapperPN+i, config.MapperHeartBeatPN+i, config.MapperHeartBeatPN+i, config.MapperPN+i, config.MapperHeartBeatPN+i)
 	}
 
 	reducerServices := ""
-	for i := 0; i < config.NumReducer; i++ {
+	for i := 1; i <= config.NumReducer; i++ {
 		reducerServices += fmt.Sprintf(`
    app-reducer-%d:
     build:
@@ -74,12 +78,14 @@ networks:
       - ./configuration.json:/Reducer/constants/configuration.json
     ports:
       - "%d:%d"  # Assegna porte univoche ai reducer
+      - "%d:%d"  # Porta univoca per servizio di HeartBeat
     environment:
       - TZ=Europe/Rome
-      - EXPOSED_PORT=%d
+      - REDUCER_PORT=%d
+      - HB_PORT=%d
     networks:
       - my-network
-`, i+1, config.ReducerPN+i, config.ReducerPN+i, config.ReducerPN+i)
+`, i, config.ReducerPN+i, config.ReducerPN+i, config.ReducerHeartBeatPN+i, config.ReducerHeartBeatPN+i, config.ReducerPN+i, config.ReducerHeartBeatPN+i)
 	}
 
 	outputFile, err := os.Create("docker-compose.yml")

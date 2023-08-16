@@ -1,7 +1,6 @@
-package utils
+package internal
 
 import (
-	"Master/models"
 	"bufio"
 	"fmt"
 	"log"
@@ -13,9 +12,9 @@ import (
 // Convert -> Converts txt file that contains nodes list of adjacency
 //			  into array of nodes pointer
 
-func Convert(graphPath string) []*models.Node {
+func Convert(graphPath string) []*Node {
 
-	var graph []*models.Node
+	var graph []*Node
 
 	inputFile, err := os.Open(graphPath)
 	if err != nil {
@@ -42,7 +41,7 @@ func Convert(graphPath string) []*models.Node {
 		outgoingLinks := parts[2:]
 		outgoingLinks = FixStrings(outgoingLinks)
 		outgoingLinksInt := ConvertOutLinks(outgoingLinks)
-		actualNode := models.Node{ID: nodeID, OutLinks: outgoingLinksInt, PageRank: 1}
+		actualNode := Node{ID: nodeID, OutLinks: outgoingLinksInt, PageRank: 1}
 		graph = append(graph, &actualNode)
 	}
 

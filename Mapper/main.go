@@ -3,6 +3,7 @@ package main
 import (
 	"Mapper/mapper"
 	"errors"
+	"fmt"
 	"google.golang.org/grpc"
 	"log"
 	"net"
@@ -10,24 +11,43 @@ import (
 )
 
 func main() {
-	// Obtains assigned port on Docker Compose from environment variable
-	port := os.Getenv("EXPOSED_PORT")
-	if port == "" {
-		err := errors.New("failed to obtain port number")
-		log.Fatalf("Failed to obtain port number %v", err)
+	// Obtains mapperPort from environment variable
+	mapperPort := os.Getenv("MAPPER_PORT")
+	if mapperPort == "" {
+		err := errors.New("failed to obtain mapperPort number")
+		log.Fatalf("Failed to obtain mapperPort number %v", err)
 	}
-	lis, err := net.Listen("tcp", ":"+port)
+	mapListener, err := net.Listen("tcp", ":"+mapperPort)
 	if err != nil {
-		log.Fatalf("Failed to listen on port %s %v", port, err)
+		log.Fatalf("Failed to listen on mapperPort %s %v", mapperPort, err)
 	}
-	log.Printf("Listening on port %s \n", port)
+	log.Printf("Listening on mapperPort %s \n", mapperPort)
 
+	// Obtains heartbeatPort from environment variable
+	heartbeatPort := os.Getenv("HB_PORT")
+	if heartbeatPort == "" {
+		err := errors.New("failed to obtain heartbeatPort number")
+		log.Fatalf("Failed to obtain heartbeatPort number %v", err)
+	}
+	hbListener, err := net.Listen("tcp", ":"+heartbeatPort)
+	if err != nil {
+		log.Fatalf("Failed to listen on heartbeatPort %s %v", heartbeatPort, err)
+	}
+	log.Printf("Listening on heartbeatPort %s \n", heartbeatPort)
+
+	// Create server for mapper
 	mapperServer := mapper.Mapper{}
-
 	// Initialize gRPC server for Mapper
-	grpcServer := grpc.NewServer()
+	mapperGrpcServer := grpc.NewServer()
+	// Register map service
+	mapper.RegisterMapperServer(mapperGrpcServer, &mapperServer)
 
-	mapper.RegisterMapperServer(grpcServer, &mapperServer)
+	// Create server for heartbeat
+	hbServer := mapper.MapperHeartbeat{}
+	// Initialize gRPC server for heartbeat
+	hbGrpcServer := grpc.NewServer()
+	// Register heartbeat service
+	mapper.RegisterMapperHeartbeatServer(hbGrpcServer, &hbServer)
 
 	// Show exposed services
 	func(server *grpc.Server) {
@@ -39,12 +59,32 @@ func main() {
 			}
 			log.Println()
 		}
-	}(grpcServer)
+	}(mapperGrpcServer)
+	func(server *grpc.Server) {
+		services := server.GetServiceInfo()
+		for keys, service := range services {
+			log.Printf("- Nome: %s\n", keys)
+			for _, method := range service.Methods {
+				log.Printf("  Metodo: %s\n", method.Name)
+			}
+			log.Println()
+		}
+	}(hbGrpcServer)
 
-	// Serve
-	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("Failed to serve gRPC on port %s %v", port, err)
+	// Serve both services
+	go func() {
+		if err := mapperGrpcServer.Serve(mapListener); err != nil {
+			log.Fatalf("Failed to serve gRPC on mapperPort %s %v", mapperPort, err)
 
-	}
+		}
+	}()
+	go func() {
+		if err := hbGrpcServer.Serve(hbListener); err != nil {
+			log.Fatalf("Failed to serve gRPC on heartbeatPort %s %v", heartbeatPort, err)
+		}
+	}()
 
+	// Keep server running
+	fmt.Println("Server is running. Press Ctrl+C to exit.")
+	select {}
 }

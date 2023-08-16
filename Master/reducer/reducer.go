@@ -11,8 +11,6 @@ type Reducer struct {
 }
 
 func (reducer *Reducer) mustEmbedUnimplementedReducerServer() {
-	//TODO implement me
-	panic("implement me")
 }
 
 // Reduce ->  sum aggregated page rank values and return the value
