@@ -37,7 +37,7 @@ In this case is not possible to modify the number of containers so don't do that
 
 To close all the container use : "docker-compose stop" <br>
 Instead to close only specific one : "docker-compose stop container-name" <br>
-<b> IMPORTANT <b> <br>
+<b> IMPORTANT </b> <br>
 Every time wants test different configuration in terms of container number or ports number, <br>
 change parameters in configuration.json and then launch pagerank.go to create a different docker-compose.yml. <br>
 
@@ -51,7 +51,7 @@ If grpc files are missing go in -> ./Mapper/mapper <br>
 Generate pb files with: <br>
   - "protoc --go_out=. .\mapper.proto"
   - "protoc --go-grpc_out=. .\mapper.proto"
-Another directory called mapper will be created, copy the files outside (into ./Mapper/mapper) <br>.
+Another directory called mapper will be created, copy the files outside (into ./Mapper/mapper).<br>
 Do the same things for reducer in -> ./Reducer/reducer <br>
 
 

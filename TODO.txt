@@ -10,4 +10,3 @@ to pageRank formula. OK
 8) Move all parameters into configuration.json and read from that.
 9) Add health-check control, to verify if all containers are still up, other-whise, remove them from
 ring, (fault tollerance)
-10) Add the possibility to re-launch a failed container
