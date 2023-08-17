@@ -44,8 +44,8 @@ change parameters in configuration.json and then launch pagerank.go to create a 
 ## Application output
 The application has a logging system and produces some output, all this things are in output directory <br>
 
-## POSSIBLE PROBLEM AND HOW TO SOLVE
-### GRPC FILE ARE MISSING
+## Possible problem and how to solve
+### Grpc file are missing
 To fix that must be installed protoc on your device. <br>
 If grpc files are missing go in -> ./Mapper/mapper <br>
 Generate pb files with: <br>
