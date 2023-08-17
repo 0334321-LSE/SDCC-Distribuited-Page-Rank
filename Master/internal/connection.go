@@ -27,26 +27,17 @@ func SetGrpcConnection(r *ring.Ring) map[int][]*grpc.ClientConn {
 		//Next container
 		r = r.Next()
 		if err != nil {
-			log.Fatalf("Could not connect: %s", err)
+			log.Printf("Could not connect with %s\n Error: %v", r.Value.(string), err)
 		}
-		defer func(conn *grpc.ClientConn) {
-			err := conn.Close()
-			if err != nil {
-				log.Fatalf("Something went wrong during connection closing %v", err)
-			}
-		}(newMap[i][0])
-
 	}
 	return newMap
 }
 
-// FixMapKeys -> Take a map with some missing connection, return a map without "holes" in key set
+// FixMapKeys -> Take connection map with some missing connection, return a map without "holes" in key set
 func FixMapKeys(originalMap map[int][]*grpc.ClientConn) map[int][]*grpc.ClientConn {
 	if len(originalMap) == 0 {
-		log.Fatal("\nMap is empty, no more connection are available")
-
+		log.Fatal("\nConnection map is empty, no more connection are available.\nTry to re-launch program.")
 	}
-
 	newMap := make(map[int][]*grpc.ClientConn)
 	// Obtains key from originalMap
 	var keys []int
@@ -56,24 +47,34 @@ func FixMapKeys(originalMap map[int][]*grpc.ClientConn) map[int][]*grpc.ClientCo
 	sort.Ints(keys)
 	// Now the key are sorted, fix keys of connection map
 	i := 0
-	for key := range keys {
+	for _, key := range keys {
 		newMap[i] = append(newMap[i], originalMap[key][0])
 		i++
 	}
 	return newMap
 }
 
-func CheckIfMapperIsAlive(m int, connWithMapper map[int][]*grpc.ClientConn, mapperRing *ring.Ring, connWithMapperHb map[int][]*grpc.ClientConn, mapperHbRing *ring.Ring) int {
+// FixMapsKeys -> Take all the connections maps and fixes possible holes in key set
+func FixMapsKeys(connWithMapper *map[int][]*grpc.ClientConn, connWithMapperHb *map[int][]*grpc.ClientConn, connWithReducer *map[int][]*grpc.ClientConn, connWithReducerHb *map[int][]*grpc.ClientConn) {
+	*connWithMapper = FixMapKeys(*connWithMapper)
+	*connWithMapperHb = FixMapKeys(*connWithMapperHb)
+	*connWithReducer = FixMapKeys(*connWithReducer)
+	*connWithReducerHb = FixMapKeys(*connWithReducerHb)
+}
+
+// CheckIfMapperIsAlive -> as the name says, check by doing a ping if there is a mapper alive, return the id of the worker that must be called
+func CheckIfMapperIsAlive(m int, connWithMapper *map[int][]*grpc.ClientConn, mapperRing **ring.Ring, connWithMapperHb *map[int][]*grpc.ClientConn, mapperHbRing **ring.Ring) int {
+
 	var chosen int
 	for alive := false; alive == false; {
 		//M % N.Container to establish which one must be chosen (round-robin)
-		chosen = m % mapperRing.Len()
+		chosen = m % (*mapperRing).Len()
 
 		// Connection with heartbeat service of chosen Mapper on port 5000X
 		// Set 5 second timeout
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
-		mapperHeartbeatConnection := mapper.NewMapperHeartbeatClient(connWithMapperHb[chosen][0])
+		mapperHeartbeatConnection := mapper.NewMapperHeartbeatClient((*connWithMapperHb)[chosen][0])
 		request := mapper.MapperHeartbeatRequest{
 			Alive: false,
 		}
@@ -82,39 +83,47 @@ func CheckIfMapperIsAlive(m int, connWithMapper map[int][]*grpc.ClientConn, mapp
 			// If occurs a timeout
 			if status.Code(err) == codes.DeadlineExceeded {
 				log.Printf("\nTimeout expired, removed connection with container")
-				// Remove container from rings
-				RemoveFromRing(mapperRing, chosen)
-				RemoveFromRing(mapperHbRing, chosen)
-
-				// Discard down-connections
-				delete(connWithMapper, chosen)
-				delete(connWithMapperHb, chosen)
-
-				// Fix keys of connection map
-				connWithMapper = FixMapKeys(connWithMapper)
-				connWithMapperHb = FixMapKeys(connWithMapperHb)
-
+				CleanMapperConn(chosen, connWithMapper, mapperRing, connWithMapperHb, mapperHbRing)
 			} else {
-				log.Printf("Error when calling Map function: %v", err)
+				// Otherwise if occurs some-other problem
+				log.Printf("\nError when calling mapper: %v", err)
+				CleanMapperConn(chosen, connWithMapper, mapperRing, connWithMapperHb, mapperHbRing)
 			}
+		} else {
+			// If there isn't an error, container is alive
+			alive = response.GetAlive()
 		}
-		// If there isn't an error, container is alive
-		alive = response.Alive
 	}
 	return chosen
 }
 
-func CheckIfReducerIsAlive(m int, connWithReducer map[int][]*grpc.ClientConn, reducerRing *ring.Ring, connWithReducerHb map[int][]*grpc.ClientConn, reducerHbRing *ring.Ring) int {
+// CleanMapperConn -> drop connection data with broken mapper-container
+func CleanMapperConn(chosen int, connWithMapper *map[int][]*grpc.ClientConn, mapperRing **ring.Ring, connWithMapperHb *map[int][]*grpc.ClientConn, mapperHbRing **ring.Ring) {
+	// Remove container from rings
+	*mapperRing = RemoveFromRing(*mapperRing, chosen)
+	*mapperHbRing = RemoveFromRing(*mapperHbRing, chosen)
+
+	// Discard down-connections
+	delete(*connWithMapper, chosen)
+	delete(*connWithMapperHb, chosen)
+
+	// Fix keys of connection map
+	*connWithMapper = FixMapKeys(*connWithMapper)
+	*connWithMapperHb = FixMapKeys(*connWithMapperHb)
+}
+
+// CheckIfReducerIsAlive -> as the name says, check by doing a ping if there is a reducer alive, return the id of the worker that must be called
+func CheckIfReducerIsAlive(m int, connWithReducer *map[int][]*grpc.ClientConn, reducerRing **ring.Ring, connWithReducerHb *map[int][]*grpc.ClientConn, reducerHbRing **ring.Ring) int {
 	var chosen int
 	for alive := false; alive == false; {
 		//M % N.Container to establish which one must be chosen (round-robin)
-		chosen = m % reducerRing.Len()
+		chosen = m % (*reducerRing).Len()
 
 		// Connection with heartbeat service of chosen Mapper on port 5000X
 		// Set 5 second timeout
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
-		reducerHeartbeatConnection := reducer.NewReducerHeartbeatClient(connWithReducerHb[chosen][0])
+		reducerHeartbeatConnection := reducer.NewReducerHeartbeatClient((*connWithReducerHb)[chosen][0])
 		request := reducer.ReducerHeartbeatRequest{
 			Alive: false,
 		}
@@ -123,24 +132,43 @@ func CheckIfReducerIsAlive(m int, connWithReducer map[int][]*grpc.ClientConn, re
 			// If occurs a timeout
 			if status.Code(err) == codes.DeadlineExceeded {
 				log.Printf("\nTimeout expired, removed connection with container")
-				// Remove container from rings
-				RemoveFromRing(reducerRing, chosen)
-				RemoveFromRing(reducerHbRing, chosen)
-
-				// Discard down-connections
-				delete(connWithReducer, chosen)
-				delete(connWithReducerHb, chosen)
-
-				// Fix keys of connection map
-				connWithReducer = FixMapKeys(connWithReducer)
-				connWithReducerHb = FixMapKeys(connWithReducerHb)
-
+				CleanReducerConn(chosen, connWithReducer, reducerRing, connWithReducerHb, reducerHbRing)
 			} else {
-				log.Printf("Error when calling Map function: %v", err)
+				// Otherwise if occurs some-other problem
+				log.Printf("\nError when calling reducer: %v", err)
+				CleanReducerConn(chosen, connWithReducer, reducerRing, connWithReducerHb, reducerHbRing)
 			}
+		} else {
+			// If there isn't an error, container is alive
+			alive = response.Alive
 		}
-		// If there isn't an error, container is alive
-		alive = response.Alive
 	}
 	return chosen
+}
+
+// CleanReducerConn -> drop connection data with broken reducer-container
+func CleanReducerConn(chosen int, connWithReducer *map[int][]*grpc.ClientConn, reducerRing **ring.Ring, connWithReducerHb *map[int][]*grpc.ClientConn, reducerHbRing **ring.Ring) {
+	// Remove container from rings
+	*reducerRing = RemoveFromRing(*reducerRing, chosen)
+	*reducerHbRing = RemoveFromRing(*reducerHbRing, chosen)
+
+	// Discard down-connections
+	delete(*connWithReducer, chosen)
+	delete(*connWithReducerHb, chosen)
+
+	// Fix keys of connection map
+	*connWithReducer = FixMapKeys(*connWithReducer)
+	*connWithReducerHb = FixMapKeys(*connWithReducerHb)
+}
+
+// CloseClientConn -> close all the opened client connections
+func CloseClientConn(m map[int][]*grpc.ClientConn) {
+	for i := 0; i < len(m); i++ {
+		func(conn *grpc.ClientConn) {
+			err := conn.Close()
+			if err != nil {
+				log.Fatalf("Something went wrong during connection closing %v", err)
+			}
+		}(m[i][0])
+	}
 }

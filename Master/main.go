@@ -54,8 +54,30 @@ func main() {
 		reducerRing.Value = fmt.Sprintf("app-reducer-%d:%d", i, config.ReducerPn+i)
 		reducerRing = reducerRing.Next()
 		reducerHbRing.Value = fmt.Sprintf("app-reducer-%d:%d", i, config.ReducerHbPn+i)
-		reducerRing = reducerRing.Next()
+		reducerHbRing = reducerHbRing.Next()
 	}
+
+	connWithMapper := make(map[int][]*grpc.ClientConn)
+	connWithMapperHb := make(map[int][]*grpc.ClientConn)
+	connWithReducer := make(map[int][]*grpc.ClientConn)
+	connWithReducerHb := make(map[int][]*grpc.ClientConn)
+
+	//----- CONNECTIONS INITIALIZING -----
+
+	// Initialize connection with each container for Mapper and Heartbeat service
+	// Mapper service
+	connWithMapper = internal.SetGrpcConnection(mapperRing)
+	// Heartbeat service
+	connWithMapperHb = internal.SetGrpcConnection(mapperHbRing)
+
+	// Initialize connection with each container for Reducer and Heartbeat service
+	// Reducer service
+	connWithReducer = internal.SetGrpcConnection(reducerRing)
+	// Heartbeat service
+	connWithReducerHb = internal.SetGrpcConnection(reducerHbRing)
+
+	// Fix potential holes in map
+	internal.FixMapsKeys(&connWithMapper, &connWithMapperHb, &connWithReducer, &connWithReducerHb)
 
 	for !convergence || iteration == config.MaxIteration {
 		func() {
@@ -65,35 +87,16 @@ func main() {
 			log.Printf("\nIteration number: %d", iteration)
 			oldPageRankList = internal.ListOfPageRank(graph)
 
-			connWithMapper := make(map[int][]*grpc.ClientConn)
-			connWithMapperHb := make(map[int][]*grpc.ClientConn)
-			connWithReducer := make(map[int][]*grpc.ClientConn)
-			connWithReducerHb := make(map[int][]*grpc.ClientConn)
-
-			//----- CONNECTIONS INITIALIZING -----
-			// Initialize connection with each container for Mapper and Heartbeat service
-			// Mapper service
-			connWithMapper = internal.SetGrpcConnection(mapperRing)
-			// Heartbeat service
-			connWithMapperHb = internal.SetGrpcConnection(mapperHbRing)
-
-			// Initialize connection with each container for Reducer task
-			// Reducer service
-			connWithReducer = internal.SetGrpcConnection(reducerRing)
-			// Heartbeat service
-			connWithReducerHb = internal.SetGrpcConnection(reducerHbRing)
-
 			// Launch a job for each node of the graph, with a round robing scheduling among containers
 			//----- MAPPER -> MAP -----
 			logMessage = fmt.Sprintf("\n\nITERATION -> %d", iteration)
 			internal.WriteOnLog(logMessage)
 
 			for m, node := range graph {
-
 				if mapperRing.Len() == 0 {
 					log.Fatalf("No more container are avaible, try to re-run program")
 				}
-				chosen := internal.CheckIfMapperIsAlive(m, connWithMapper, mapperRing, connWithMapperHb, mapperHbRing)
+				chosen := internal.CheckIfMapperIsAlive(m, &connWithMapper, &mapperRing, &connWithMapperHb, &mapperHbRing)
 				// If at least one container is alive, launch map task
 				// Connection with MapperClient on ports 900X, for each node launch MAP job
 				mapperConnection := mapper.NewMapperClient(connWithMapper[chosen][0])
@@ -118,7 +121,7 @@ func main() {
 				if reducerRing.Len() == 0 {
 					log.Fatalf("No more container are avaible, try to re-run program")
 				}
-				chosen := internal.CheckIfReducerIsAlive(m, connWithReducer, reducerRing, connWithReducerHb, reducerHbRing)
+				chosen := internal.CheckIfReducerIsAlive(m, &connWithReducer, &reducerRing, &connWithReducerHb, &reducerHbRing)
 				// If at least one container is alive, launch reduce task
 				// Connection with ReducerClient on ports 10000X, for each node launch REDUCE-job
 				reducerConnection := reducer.NewReducerClient(connWithReducer[chosen][0])
@@ -143,7 +146,7 @@ func main() {
 				if mapperRing.Len() == 0 {
 					log.Fatalf("No more container are avaible, try to re-run program")
 				}
-				chosen := internal.CheckIfMapperIsAlive(m, connWithMapper, mapperRing, connWithMapperHb, mapperHbRing)
+				chosen := internal.CheckIfMapperIsAlive(m, &connWithMapper, &mapperRing, &connWithMapperHb, &mapperHbRing)
 				// If at least one container is alive, launch map clean up task
 				// Connection with MapperClient on ports 900X, for each node launch MAP-CLEAN job
 				mapperConnection := mapper.NewMapperClient(connWithMapper[chosen][0])
@@ -164,7 +167,7 @@ func main() {
 				if reducerRing.Len() == 0 {
 					log.Fatalf("No more container are avaible, try to re-run program")
 				}
-				chosen := internal.CheckIfReducerIsAlive(m, connWithReducer, reducerRing, connWithReducerHb, reducerHbRing)
+				chosen := internal.CheckIfReducerIsAlive(m, &connWithReducer, &reducerRing, &connWithReducerHb, &reducerHbRing)
 				// If at least one container is alive, launch reducer clean up task
 				// Connection with ReducerClient on ports 10000X, for each node launch REDUCE-CLEAN job
 				reducerConnection := reducer.NewReducerClient(connWithReducer[chosen][0])
@@ -197,6 +200,12 @@ func main() {
 
 		}()
 	}
+
+	// Close client connections
+	internal.CloseClientConn(connWithMapper)
+	internal.CloseClientConn(connWithMapperHb)
+	internal.CloseClientConn(connWithReducer)
+	internal.CloseClientConn(connWithReducerHb)
 
 	// Print final results
 	if convergence {

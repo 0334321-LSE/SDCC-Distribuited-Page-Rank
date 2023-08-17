@@ -3,7 +3,6 @@ package main
 import (
 	"Reducer/reducer"
 	"errors"
-	"fmt"
 	"google.golang.org/grpc"
 	"log"
 	"net"
@@ -38,16 +37,14 @@ func main() {
 	// Create server for reducer
 	reducerServer := reducer.Reducer{}
 	// Initialize gRPC server for Reducer
-	reducerGrpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer()
 	// Register reduce service
-	reducer.RegisterReducerServer(reducerGrpcServer, &reducerServer)
+	reducer.RegisterReducerServer(grpcServer, &reducerServer)
 
 	// Create server for heartbeat
 	hbServer := reducer.ReducerHeartbeat{}
-	// Initialize gRPC server for heartbeat
-	hbGrpcServer := grpc.NewServer()
 	// Register heartbeat service
-	reducer.RegisterReducerHeartbeatServer(hbGrpcServer, &hbServer)
+	reducer.RegisterReducerHeartbeatServer(grpcServer, &hbServer)
 
 	// Show exposed services
 	func(server *grpc.Server) {
@@ -59,33 +56,24 @@ func main() {
 			}
 			log.Println()
 		}
-	}(reducerGrpcServer)
-	func(server *grpc.Server) {
-		services := server.GetServiceInfo()
-		for keys, service := range services {
-			log.Printf("- Nome: %s\n", keys)
-			for _, method := range service.Methods {
-				log.Printf("  Metodo: %s\n", method.Name)
-			}
-			log.Println()
-		}
-	}(hbGrpcServer)
+	}(grpcServer)
 
 	// Serve both services
 	go func() {
-		if err := reducerGrpcServer.Serve(reducerListener); err != nil {
+		if err := grpcServer.Serve(reducerListener); err != nil {
 			log.Fatalf("Failed to serve gRPC on reducerPort %s %v", reducerPort, err)
 
 		}
 	}()
 	go func() {
-		if err := hbGrpcServer.Serve(hbListener); err != nil {
+		if err := grpcServer.Serve(hbListener); err != nil {
 			log.Fatalf("Failed to serve gRPC on heartbeatPort %s %v", heartbeatPort, err)
 
 		}
 	}()
+
 	// Keep server running
-	fmt.Println("Server is running. Press Ctrl+C to exit.")
+	log.Println("Server is running.")
 	select {}
 
 }

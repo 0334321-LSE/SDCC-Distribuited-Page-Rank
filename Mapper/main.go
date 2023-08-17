@@ -38,16 +38,14 @@ func main() {
 	// Create server for mapper
 	mapperServer := mapper.Mapper{}
 	// Initialize gRPC server for Mapper
-	mapperGrpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer()
 	// Register map service
-	mapper.RegisterMapperServer(mapperGrpcServer, &mapperServer)
+	mapper.RegisterMapperServer(grpcServer, &mapperServer)
 
 	// Create server for heartbeat
 	hbServer := mapper.MapperHeartbeat{}
-	// Initialize gRPC server for heartbeat
-	hbGrpcServer := grpc.NewServer()
 	// Register heartbeat service
-	mapper.RegisterMapperHeartbeatServer(hbGrpcServer, &hbServer)
+	mapper.RegisterMapperHeartbeatServer(grpcServer, &hbServer)
 
 	// Show exposed services
 	func(server *grpc.Server) {
@@ -59,32 +57,22 @@ func main() {
 			}
 			log.Println()
 		}
-	}(mapperGrpcServer)
-	func(server *grpc.Server) {
-		services := server.GetServiceInfo()
-		for keys, service := range services {
-			log.Printf("- Nome: %s\n", keys)
-			for _, method := range service.Methods {
-				log.Printf("  Metodo: %s\n", method.Name)
-			}
-			log.Println()
-		}
-	}(hbGrpcServer)
+	}(grpcServer)
 
 	// Serve both services
 	go func() {
-		if err := mapperGrpcServer.Serve(mapListener); err != nil {
+		if err := grpcServer.Serve(mapListener); err != nil {
 			log.Fatalf("Failed to serve gRPC on mapperPort %s %v", mapperPort, err)
 
 		}
 	}()
 	go func() {
-		if err := hbGrpcServer.Serve(hbListener); err != nil {
+		if err := grpcServer.Serve(hbListener); err != nil {
 			log.Fatalf("Failed to serve gRPC on heartbeatPort %s %v", heartbeatPort, err)
 		}
 	}()
 
 	// Keep server running
-	fmt.Println("Server is running. Press Ctrl+C to exit.")
+	fmt.Println("Server is running.")
 	select {}
 }
