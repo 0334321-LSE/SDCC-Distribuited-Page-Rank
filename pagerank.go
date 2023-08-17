@@ -136,4 +136,13 @@ func main() {
 		fmt.Println("Error running docker-compose up:", err)
 		return
 	}
+
+	cmd = exec.Command("docker-compose", "stop")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err = cmd.Run()
+	if err != nil {
+		fmt.Println("Error running docker-compose stop:", err)
+		return
+	}
 }

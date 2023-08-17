@@ -25,7 +25,7 @@ func main() {
 
 	graph := internal.Convert(config.GraphPath)
 	if graph == nil {
-		fmt.Println("Something went wrong during file opening, aborting")
+		log.Fatalf("Something went wrong during file opening, aborting")
 		return
 	}
 	var oldPageRankList []float64

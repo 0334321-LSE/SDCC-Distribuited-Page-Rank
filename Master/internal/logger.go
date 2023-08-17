@@ -1,13 +1,16 @@
 package internal
 
 import (
+	"Master/constants"
 	"log"
 	"os"
 )
 
 func WriteOnLog(logMessage string) {
+	var config constants.Config
+	constants.ReadJsonConfig(&config)
 	// Open the file in append mod
-	file, err := os.OpenFile("./output/log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	file, err := os.OpenFile(config.LogPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatalf("Impossible to open log file: %v", err)
 		return

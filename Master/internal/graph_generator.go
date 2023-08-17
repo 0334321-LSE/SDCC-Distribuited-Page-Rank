@@ -14,9 +14,9 @@ import (
 	"strings"
 )
 
-// BarabasiAlbertGraph genera un grafo utilizzando l'algoritmo Barabasi-Albert.
+// GraphGenerator genera un grafo,
 // nodes è il numero di nodi nel grafo, edgesToAttach rappresenta quanti archi collegare ad ogni nuovo nodo.
-func BarabasiAlbertGraph(nodes, edgesToAttach int, seed int64) map[int][]int {
+func GraphGenerator(nodes, edgesToAttach int, seed int64) map[int][]int {
 	if nodes < 1 {
 		return nil
 	}
@@ -88,7 +88,7 @@ func rouletteSelect(weights []float64) int {
 	return len(weights) - 1
 }
 
-// Controlla se esiste già un arco tra due nodi nel grafo.
+// hasEdge -> Controlla se esiste già un arco tra due nodi nel grafo.
 func hasEdge(graph map[int][]int, node1, node2 int) bool {
 	for _, neighbor := range graph[node1] {
 		if neighbor == node2 {
@@ -255,7 +255,7 @@ func plotGraph(graph map[int][]int) {
 	log.Printf("Graph saved ad graph.png")
 }
 
-// writeAdjacencyListToFile scrive la lista di adiacenza del grafo su un file di testo.
+// writeAdjacencyListToFile -> scrive la lista di adiacenza che rappresenta il grafo su un file di testo.
 func writeAdjacencyListToFile(graph map[int][]int, filename string) error {
 	file, err := os.Create(filename)
 	if err != nil {
@@ -285,12 +285,12 @@ func writeAdjacencyListToFile(graph map[int][]int, filename string) error {
 	return nil
 }
 
-// CreateRandomGraph -> generate a graph randomly by using Barabasi-Albert algorithm
+// CreateRandomGraph -> generate a graph randomly by using GraphGenerator, return adjacency list into a map
 func CreateRandomGraph(numNodes int, edgesToAttach int, seed int64) map[int][]int {
 	var config constants.Config
 	constants.ReadJsonConfig(&config)
 	// Generate graph by using Barabasi-Albert.
-	graph := BarabasiAlbertGraph(numNodes, edgesToAttach, seed)
+	graph := GraphGenerator(numNodes, edgesToAttach, seed)
 
 	keys := make([]int, 0, len(graph))
 	for k := range graph {
@@ -301,7 +301,7 @@ func CreateRandomGraph(numNodes int, edgesToAttach int, seed int64) map[int][]in
 	log.Printf("\n-Adjacency list-\n")
 	for _, k := range keys {
 		log.Printf("%d -> %v\n", k, graph[k])
-		writeOnLog(fmt.Sprintf("\n%d -> %v", k, graph[k]))
+		WriteOnLog(fmt.Sprintf("\n%d -> %v", k, graph[k]))
 	}
 
 	// Save the list into a txt file.
@@ -314,26 +314,4 @@ func CreateRandomGraph(numNodes int, edgesToAttach int, seed int64) map[int][]in
 	// Plot and save the graph
 	plotGraph(graph)
 	return graph
-}
-
-func writeOnLog(logMessage string) {
-	// Open the file in append mod
-	file, err := os.OpenFile("./output/log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		log.Fatalf("Impossible to open log file: %v", err)
-		return
-	}
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-			log.Fatalf("Impossibile to close log file: %v", err)
-		}
-	}(file)
-
-	// Write into the log
-	_, err = file.WriteString(logMessage)
-	if err != nil {
-		log.Fatalf("Impossible to write on log: %v", err)
-		return
-	}
 }
