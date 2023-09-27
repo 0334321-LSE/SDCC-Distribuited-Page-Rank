@@ -7293,3 +7293,747 @@ Sum of pageRank values: 1.000000
 
 Page rank algorithm run is done, bye bye
 ----------------------------------------------------
+2023-09-25 21:57:09 
+- Starting pagerank algorithm -
+0 -> [4 15 16]
+1 -> [0 4 6 9 13]
+2 -> [1 0 7 19]
+3 -> [0 1 2 4 7 14 16]
+4 -> [3 1 2 0 5 12]
+5 -> [11]
+6 -> [1 2 0]
+7 -> [8 12 14]
+8 -> [4 1 5 7]
+9 -> [6 1 3 2 15]
+10 -> [1 5 3 4 13]
+11 -> [5 7 3 8 17]
+12 -> [6 4 7 0 13]
+13 -> [10 2 9 12 1]
+14 -> [1 3 7 17]
+15 -> [4 0 5 9]
+16 -> [3 0 6 9]
+17 -> [6 11 2 12 14]
+18 -> [10 5 0 6 2]
+19 -> [9 2 16 7]
+
+ITERATION -> 1
+Node 0 -> PageRank 0.085867
+Node 1 -> PageRank 0.085867
+Node 2 -> PageRank 0.075029
+Node 3 -> PageRank 0.059633
+Node 4 -> PageRank 0.070815
+Node 5 -> PageRank 0.059633
+Node 6 -> PageRank 0.059031
+Node 7 -> PageRank 0.069611
+Node 8 -> PageRank 0.033142
+Node 9 -> PageRank 0.055419
+Node 10 -> PageRank 0.028325
+Node 11 -> PageRank 0.057225
+Node 12 -> PageRank 0.046388
+Node 13 -> PageRank 0.035550
+Node 14 -> PageRank 0.038302
+Node 15 -> PageRank 0.033142
+Node 16 -> PageRank 0.040109
+Node 17 -> PageRank 0.030131
+Node 18 -> PageRank 0.013875
+Node 19 -> PageRank 0.022906
+
+ITERATION -> 2
+Node 0 -> PageRank 0.090673
+Node 1 -> PageRank 0.086469
+Node 2 -> PageRank 0.066415
+Node 3 -> PageRank 0.056935
+Node 4 -> PageRank 0.075886
+Node 5 -> PageRank 0.048742
+Node 6 -> PageRank 0.054597
+Node 7 -> PageRank 0.065596
+Node 8 -> PageRank 0.038909
+Node 9 -> PageRank 0.048788
+Node 10 -> PageRank 0.021017
+Node 11 -> PageRank 0.061314
+Node 12 -> PageRank 0.048658
+Node 13 -> PageRank 0.037079
+Node 14 -> PageRank 0.041149
+Node 15 -> PageRank 0.042563
+Node 16 -> PageRank 0.044847
+Node 17 -> PageRank 0.029062
+Node 18 -> PageRank 0.013875
+Node 19 -> PageRank 0.027427
+
+ITERATION -> 3
+Node 0 -> PageRank 0.091354
+Node 1 -> PageRank 0.083940
+Node 2 -> PageRank 0.065605
+Node 3 -> PageRank 0.057493
+Node 4 -> PageRank 0.078867
+Node 5 -> PageRank 0.051630
+Node 6 -> PageRank 0.054756
+Node 7 -> PageRank 0.067053
+Node 8 -> PageRank 0.038533
+Node 9 -> PageRank 0.052470
+Node 10 -> PageRank 0.021238
+Node 11 -> PageRank 0.053290
+Node 12 -> PageRank 0.048368
+Node 13 -> PageRank 0.036438
+Node 14 -> PageRank 0.039749
+Node 15 -> PageRank 0.042762
+Node 16 -> PageRank 0.046543
+Node 17 -> PageRank 0.030167
+Node 18 -> PageRank 0.013875
+Node 19 -> PageRank 0.025871
+
+ITERATION -> 4
+Node 0 -> PageRank 0.091597
+Node 1 -> PageRank 0.084398
+Node 2 -> PageRank 0.066377
+Node 3 -> PageRank 0.057310
+Node 4 -> PageRank 0.078681
+Node 5 -> PageRank 0.050830
+Node 6 -> PageRank 0.055346
+Node 7 -> PageRank 0.065161
+Node 8 -> PageRank 0.037724
+Node 9 -> PageRank 0.052073
+Node 10 -> PageRank 0.021145
+Node 11 -> PageRank 0.055537
+Node 12 -> PageRank 0.049145
+Node 13 -> PageRank 0.036062
+Node 14 -> PageRank 0.040317
+Node 15 -> PageRank 0.043458
+Node 16 -> PageRank 0.046483
+Node 17 -> PageRank 0.028755
+Node 18 -> PageRank 0.013875
+Node 19 -> PageRank 0.025725
+
+ITERATION -> 5
+Node 0 -> PageRank 0.092131
+Node 1 -> PageRank 0.084471
+Node 2 -> PageRank 0.066136
+Node 3 -> PageRank 0.057633
+Node 4 -> PageRank 0.078866
+Node 5 -> PageRank 0.051099
+Node 6 -> PageRank 0.055253
+Node 7 -> PageRank 0.065649
+Node 8 -> PageRank 0.037593
+Node 9 -> PageRank 0.052174
+Node 10 -> PageRank 0.021091
+Node 11 -> PageRank 0.054755
+Node 12 -> PageRank 0.048409
+Node 13 -> PageRank 0.036227
+Node 14 -> PageRank 0.039638
+Node 15 -> PageRank 0.043459
+Node 16 -> PageRank 0.046496
+Node 17 -> PageRank 0.029182
+Node 18 -> PageRank 0.013875
+Node 19 -> PageRank 0.025864
+
+ITERATION -> 6
+Node 0 -> PageRank 0.092027
+Node 1 -> PageRank 0.084344
+Node 2 -> PageRank 0.066294
+Node 3 -> PageRank 0.057429
+Node 4 -> PageRank 0.078900
+Node 5 -> PageRank 0.050976
+Node 6 -> PageRank 0.055235
+Node 7 -> PageRank 0.065298
+Node 8 -> PageRank 0.037597
+Node 9 -> PageRank 0.052236
+Node 10 -> PageRank 0.021115
+Node 11 -> PageRank 0.055011
+Node 12 -> PageRank 0.048634
+Node 13 -> PageRank 0.036124
+Node 14 -> PageRank 0.039851
+Node 15 -> PageRank 0.043602
+Node 16 -> PageRank 0.046683
+Node 17 -> PageRank 0.028947
+Node 18 -> PageRank 0.013875
+Node 19 -> PageRank 0.025821
+
+ITERATION -> 7
+Node 0 -> PageRank 0.092108
+Node 1 -> PageRank 0.084388
+Node 2 -> PageRank 0.066225
+Node 3 -> PageRank 0.057554
+Node 4 -> PageRank 0.078899
+Node 5 -> PageRank 0.051048
+Node 6 -> PageRank 0.055258
+Node 7 -> PageRank 0.065407
+Node 8 -> PageRank 0.037550
+Node 9 -> PageRank 0.052254
+Node 10 -> PageRank 0.021100
+Node 11 -> PageRank 0.054888
+Node 12 -> PageRank 0.048505
+Node 13 -> PageRank 0.036141
+Node 14 -> PageRank 0.039711
+Node 15 -> PageRank 0.043586
+Node 16 -> PageRank 0.046630
+Node 17 -> PageRank 0.029022
+Node 18 -> PageRank 0.013875
+Node 19 -> PageRank 0.025849
+
+ITERATION -> 8
+Node 0 -> PageRank 0.092089
+Node 1 -> PageRank 0.084364
+Node 2 -> PageRank 0.066265
+Node 3 -> PageRank 0.057502
+Node 4 -> PageRank 0.078905
+Node 5 -> PageRank 0.051016
+Node 6 -> PageRank 0.055250
+Node 7 -> PageRank 0.065342
+Node 8 -> PageRank 0.037558
+Node 9 -> PageRank 0.052256
+Node 10 -> PageRank 0.021102
+Node 11 -> PageRank 0.054951
+Node 12 -> PageRank 0.048544
+Node 13 -> PageRank 0.036127
+Node 14 -> PageRank 0.039761
+Node 15 -> PageRank 0.043609
+Node 16 -> PageRank 0.046667
+Node 17 -> PageRank 0.028979
+Node 18 -> PageRank 0.013875
+Node 19 -> PageRank 0.025837
+
+Obtained convergence after 8 iteration, here final results: 
+Nodo: 0, PageRank: 0.092089
+Nodo: 1, PageRank: 0.084364
+Nodo: 2, PageRank: 0.066265
+Nodo: 3, PageRank: 0.057502
+Nodo: 4, PageRank: 0.078905
+Nodo: 5, PageRank: 0.051016
+Nodo: 6, PageRank: 0.055250
+Nodo: 7, PageRank: 0.065342
+Nodo: 8, PageRank: 0.037558
+Nodo: 9, PageRank: 0.052256
+Nodo: 10, PageRank: 0.021102
+Nodo: 11, PageRank: 0.054951
+Nodo: 12, PageRank: 0.048544
+Nodo: 13, PageRank: 0.036127
+Nodo: 14, PageRank: 0.039761
+Nodo: 15, PageRank: 0.043609
+Nodo: 16, PageRank: 0.046667
+Nodo: 17, PageRank: 0.028979
+Nodo: 18, PageRank: 0.013875
+Nodo: 19, PageRank: 0.025837
+
+--Consistency check--
+Sum of pageRank values: 1.000000
+
+Page rank algorithm run is done, bye bye
+----------------------------------------------------
+2023-09-25 21:59:35 
+- Starting pagerank algorithm -
+0 -> [1 3 7 19]
+1 -> [0 7]
+2 -> [0 1 3 7 15 17]
+3 -> [2 0 1 10]
+4 -> [0 2 3 8 11]
+5 -> [4 3 1 0 7 8 11 19]
+6 -> [2 5 3 7 11 18]
+7 -> [5 0 2 6 1]
+8 -> [4 5]
+9 -> [2 1 0 6 11 17]
+10 -> []
+11 -> [6 9 4 8 5]
+12 -> [4 11 8 2 13]
+13 -> [2 0 12 5]
+14 -> [6 2 5]
+15 -> [7 0 2 9]
+16 -> [6 10 13 14 4]
+17 -> [5 6 2 9]
+18 -> []
+19 -> [5 2 0 4]
+
+ITERATION -> 1
+Node 0 -> PageRank 0.100821
+Node 1 -> PageRank 0.057471
+Node 2 -> PageRank 0.106541
+Node 3 -> PageRank 0.048440
+Node 4 -> PageRank 0.068911
+Node 5 -> PageRank 0.093295
+Node 6 -> PageRank 0.064395
+Node 7 -> PageRank 0.068309
+Node 8 -> PageRank 0.041817
+Node 9 -> PageRank 0.040914
+Node 10 -> PageRank 0.031883
+Node 11 -> PageRank 0.046634
+Node 12 -> PageRank 0.024658
+Node 13 -> PageRank 0.030076
+Node 14 -> PageRank 0.022851
+Node 15 -> PageRank 0.021647
+Node 16 -> PageRank 0.015626
+Node 17 -> PageRank 0.027668
+Node 18 -> PageRank 0.021647
+Node 19 -> PageRank 0.029173
+
+ITERATION -> 2
+Node 0 -> PageRank 0.105583
+Node 1 -> PageRank 0.078463
+Node 2 -> PageRank 0.085385
+Node 3 -> PageRank 0.072628
+Node 4 -> PageRank 0.056812
+Node 5 -> PageRank 0.076123
+Node 6 -> PageRank 0.049745
+Node 7 -> PageRank 0.087342
+Node 8 -> PageRank 0.044135
+Node 9 -> PageRank 0.031097
+Node 10 -> PageRank 0.026458
+Node 11 -> PageRank 0.050078
+Node 12 -> PageRank 0.020883
+Node 13 -> PageRank 0.021272
+Node 14 -> PageRank 0.017709
+Node 15 -> PageRank 0.028280
+Node 16 -> PageRank 0.015451
+Node 17 -> PageRank 0.033207
+Node 18 -> PageRank 0.023205
+Node 19 -> PageRank 0.042087
+
+ITERATION -> 3
+Node 0 -> PageRank 0.115327
+Node 1 -> PageRank 0.081291
+Node 2 -> PageRank 0.089096
+Node 3 -> PageRank 0.066007
+Node 4 -> PageRank 0.058487
+Node 5 -> PageRank 0.079078
+Node 6 -> PageRank 0.051677
+Node 7 -> PageRank 0.091250
+Node 8 -> PageRank 0.040918
+Node 9 -> PageRank 0.033922
+Node 10 -> PageRank 0.030931
+Node 11 -> PageRank 0.043416
+Node 12 -> PageRank 0.019422
+Node 13 -> PageRank 0.020830
+Node 14 -> PageRank 0.017812
+Node 15 -> PageRank 0.025861
+Node 16 -> PageRank 0.015580
+Node 17 -> PageRank 0.029606
+Node 18 -> PageRank 0.021570
+Node 19 -> PageRank 0.041525
+
+ITERATION -> 4
+Node 0 -> PageRank 0.116347
+Node 1 -> PageRank 0.083426
+Node 2 -> PageRank 0.087777
+Node 3 -> PageRank 0.068908
+Node 4 -> PageRank 0.056287
+Node 5 -> PageRank 0.076896
+Node 6 -> PageRank 0.050965
+Node 7 -> PageRank 0.094494
+Node 8 -> PageRank 0.040205
+Node 9 -> PageRank 0.031825
+Node 10 -> PageRank 0.029706
+Node 11 -> PageRank 0.044239
+Node 12 -> PageRank 0.019295
+Node 13 -> PageRank 0.020590
+Node 14 -> PageRank 0.017784
+Node 15 -> PageRank 0.026261
+Node 16 -> PageRank 0.015532
+Node 17 -> PageRank 0.030346
+Node 18 -> PageRank 0.021755
+Node 19 -> PageRank 0.043505
+
+ITERATION -> 5
+Node 0 -> PageRank 0.117593
+Node 1 -> PageRank 0.084017
+Node 2 -> PageRank 0.088630
+Node 3 -> PageRank 0.068354
+Node 4 -> PageRank 0.056306
+Node 5 -> PageRank 0.077603
+Node 6 -> PageRank 0.051442
+Node 7 -> PageRank 0.095102
+Node 8 -> PageRank 0.039813
+Node 9 -> PageRank 0.032171
+Node 10 -> PageRank 0.030245
+Node 11 -> PageRank 0.043389
+Node 12 -> PageRank 0.019273
+Node 13 -> PageRank 0.020586
+Node 14 -> PageRank 0.017798
+Node 15 -> PageRank 0.026124
+Node 16 -> PageRank 0.015554
+Node 17 -> PageRank 0.029956
+Node 18 -> PageRank 0.021691
+Node 19 -> PageRank 0.043514
+
+ITERATION -> 6
+Node 0 -> PageRank 0.117980
+Node 1 -> PageRank 0.084436
+Node 2 -> PageRank 0.088624
+Node 3 -> PageRank 0.068804
+Node 4 -> PageRank 0.056105
+Node 5 -> PageRank 0.077416
+Node 6 -> PageRank 0.051383
+Node 7 -> PageRank 0.095737
+Node 8 -> PageRank 0.039751
+Node 9 -> PageRank 0.031951
+Node 10 -> PageRank 0.030146
+Node 11 -> PageRank 0.043550
+Node 12 -> PageRank 0.019270
+Node 13 -> PageRank 0.020584
+Node 14 -> PageRank 0.017799
+Node 15 -> PageRank 0.026224
+Node 16 -> PageRank 0.015552
+Node 17 -> PageRank 0.030098
+Node 18 -> PageRank 0.021746
+Node 19 -> PageRank 0.043801
+
+ITERATION -> 7
+Node 0 -> PageRank 0.118304
+Node 1 -> PageRank 0.084638
+Node 2 -> PageRank 0.088833
+Node 3 -> PageRank 0.068824
+Node 4 -> PageRank 0.056144
+Node 5 -> PageRank 0.077583
+Node 6 -> PageRank 0.051501
+Node 7 -> PageRank 0.095956
+Node 8 -> PageRank 0.039732
+Node 9 -> PageRank 0.032022
+Node 10 -> PageRank 0.030231
+Node 11 -> PageRank 0.043474
+Node 12 -> PageRank 0.019274
+Node 13 -> PageRank 0.020587
+Node 14 -> PageRank 0.017803
+Node 15 -> PageRank 0.026227
+Node 16 -> PageRank 0.015556
+Node 17 -> PageRank 0.030075
+Node 18 -> PageRank 0.021743
+Node 19 -> PageRank 0.043857
+
+ITERATION -> 8
+Node 0 -> PageRank 0.118479
+Node 1 -> PageRank 0.084782
+Node 2 -> PageRank 0.088906
+Node 3 -> PageRank 0.068943
+Node 4 -> PageRank 0.056153
+Node 5 -> PageRank 0.077619
+Node 6 -> PageRank 0.051528
+Node 7 -> PageRank 0.096143
+Node 8 -> PageRank 0.039743
+Node 9 -> PageRank 0.032008
+Node 10 -> PageRank 0.030236
+Node 11 -> PageRank 0.043519
+Node 12 -> PageRank 0.019275
+Node 13 -> PageRank 0.020589
+Node 14 -> PageRank 0.017804
+Node 15 -> PageRank 0.026254
+Node 16 -> PageRank 0.015557
+Node 17 -> PageRank 0.030110
+Node 18 -> PageRank 0.021758
+Node 19 -> PageRank 0.043932
+
+ITERATION -> 9
+Node 0 -> PageRank 0.118611
+Node 1 -> PageRank 0.084874
+Node 2 -> PageRank 0.088984
+Node 3 -> PageRank 0.068993
+Node 4 -> PageRank 0.056182
+Node 5 -> PageRank 0.077681
+Node 6 -> PageRank 0.051568
+Node 7 -> PageRank 0.096248
+Node 8 -> PageRank 0.039756
+Node 9 -> PageRank 0.032027
+Node 10 -> PageRank 0.030259
+Node 11 -> PageRank 0.043526
+Node 12 -> PageRank 0.019277
+Node 13 -> PageRank 0.020591
+Node 14 -> PageRank 0.017806
+Node 15 -> PageRank 0.026264
+Node 16 -> PageRank 0.015558
+Node 17 -> PageRank 0.030118
+Node 18 -> PageRank 0.021763
+Node 19 -> PageRank 0.043968
+
+ITERATION -> 10
+Node 0 -> PageRank 0.118699
+Node 1 -> PageRank 0.084940
+Node 2 -> PageRank 0.089031
+Node 3 -> PageRank 0.069041
+Node 4 -> PageRank 0.056201
+Node 5 -> PageRank 0.077716
+Node 6 -> PageRank 0.051589
+Node 7 -> PageRank 0.096328
+Node 8 -> PageRank 0.039767
+Node 9 -> PageRank 0.032032
+Node 10 -> PageRank 0.030268
+Node 11 -> PageRank 0.043544
+Node 12 -> PageRank 0.019278
+Node 13 -> PageRank 0.020592
+Node 14 -> PageRank 0.017807
+Node 15 -> PageRank 0.026274
+Node 16 -> PageRank 0.015558
+Node 17 -> PageRank 0.030130
+Node 18 -> PageRank 0.021768
+Node 19 -> PageRank 0.043998
+
+Obtained convergence after 10 iteration, here final results: 
+Nodo: 0, PageRank: 0.118699
+Nodo: 1, PageRank: 0.084940
+Nodo: 2, PageRank: 0.089031
+Nodo: 3, PageRank: 0.069041
+Nodo: 4, PageRank: 0.056201
+Nodo: 5, PageRank: 0.077716
+Nodo: 6, PageRank: 0.051589
+Nodo: 7, PageRank: 0.096328
+Nodo: 8, PageRank: 0.039767
+Nodo: 9, PageRank: 0.032032
+Nodo: 10, PageRank: 0.030268
+Nodo: 11, PageRank: 0.043544
+Nodo: 12, PageRank: 0.019278
+Nodo: 13, PageRank: 0.020592
+Nodo: 14, PageRank: 0.017807
+Nodo: 15, PageRank: 0.026274
+Nodo: 16, PageRank: 0.015558
+Nodo: 17, PageRank: 0.030130
+Nodo: 18, PageRank: 0.021768
+Nodo: 19, PageRank: 0.043998
+
+--Consistency check--
+Sum of pageRank values: 0.984561
+
+Page rank algorithm run is done, bye bye
+----------------------------------------------------
+2023-09-25 21:59:54 
+- Starting pagerank algorithm -
+0 -> [2 9]
+1 -> [0 2 6 12]
+2 -> [8 9 12]
+3 -> [2 1 0 4 10 15]
+4 -> [3 0 2 1 10 19]
+5 -> [0 4 1 3 17]
+6 -> [13]
+7 -> [4 6 3 2 11]
+8 -> []
+9 -> [8 3 0 2 4 19]
+10 -> [11 13]
+11 -> [1 0 4 10 7]
+12 -> []
+13 -> [14]
+14 -> [2 12 13 3]
+15 -> [7 1 3 0 2 16]
+16 -> [15 12 2 0 13]
+17 -> [12 5 1 10 0]
+18 -> [7 9 8 3 1]
+19 -> [15 4 9 2 13]
+
+ITERATION -> 1
+Node 0 -> PageRank 0.080019
+Node 1 -> PageRank 0.064967
+Node 2 -> PageRank 0.099888
+Node 3 -> PageRank 0.066773
+Node 4 -> PageRank 0.058946
+Node 5 -> PageRank 0.025230
+Node 6 -> PageRank 0.034261
+Node 7 -> PageRank 0.038475
+Node 8 -> PageRank 0.043292
+Node 9 -> PageRank 0.062559
+Node 10 -> PageRank 0.044496
+Node 11 -> PageRank 0.043292
+Node 12 -> PageRank 0.062559
+Node 13 -> PageRank 0.095673
+Node 14 -> PageRank 0.054130
+Node 15 -> PageRank 0.038475
+Node 16 -> PageRank 0.024025
+Node 17 -> PageRank 0.025230
+Node 18 -> PageRank 0.018005
+Node 19 -> PageRank 0.030046
+
+ITERATION -> 2
+Node 0 -> PageRank 0.074915
+Node 1 -> PageRank 0.054777
+Node 2 -> PageRank 0.109953
+Node 3 -> PageRank 0.059705
+Node 4 -> PageRank 0.054233
+Node 5 -> PageRank 0.022502
+Node 6 -> PageRank 0.036151
+Node 7 -> PageRank 0.032347
+Node 8 -> PageRank 0.053047
+Node 9 -> PageRank 0.078763
+Node 10 -> PageRank 0.043896
+Node 11 -> PageRank 0.040490
+Node 12 -> PageRank 0.071542
+Node 13 -> PageRank 0.077275
+Node 14 -> PageRank 0.087980
+Node 15 -> PageRank 0.034710
+Node 16 -> PageRank 0.023489
+Node 17 -> PageRank 0.022502
+Node 18 -> PageRank 0.018856
+Node 19 -> PageRank 0.033488
+
+ITERATION -> 3
+Node 0 -> PageRank 0.072419
+Node 1 -> PageRank 0.052371
+Node 2 -> PageRank 0.112532
+Node 3 -> PageRank 0.066129
+Node 4 -> PageRank 0.054682
+Node 5 -> PageRank 0.022644
+Node 6 -> PageRank 0.033961
+Node 7 -> PageRank 0.032148
+Node 8 -> PageRank 0.058082
+Node 9 -> PageRank 0.080500
+Node 10 -> PageRank 0.042215
+Node 11 -> PageRank 0.039924
+Node 12 -> PageRank 0.078304
+Node 13 -> PageRank 0.085494
+Node 14 -> PageRank 0.075223
+Node 15 -> PageRank 0.034815
+Node 16 -> PageRank 0.023572
+Node 17 -> PageRank 0.022644
+Node 18 -> PageRank 0.019393
+Node 19 -> PageRank 0.035407
+
+ITERATION -> 4
+Node 0 -> PageRank 0.072946
+Node 1 -> PageRank 0.053189
+Node 2 -> PageRank 0.110143
+Node 3 -> PageRank 0.064111
+Node 4 -> PageRank 0.055793
+Node 5 -> PageRank 0.022606
+Node 6 -> PageRank 0.033439
+Node 7 -> PageRank 0.032097
+Node 8 -> PageRank 0.058931
+Node 9 -> PageRank 0.080515
+Node 10 -> PageRank 0.042922
+Node 11 -> PageRank 0.039229
+Node 12 -> PageRank 0.076160
+Node 13 -> PageRank 0.081230
+Node 14 -> PageRank 0.081103
+Node 15 -> PageRank 0.035819
+Node 16 -> PageRank 0.023526
+Node 17 -> PageRank 0.022606
+Node 18 -> PageRank 0.019334
+Node 19 -> PageRank 0.035612
+
+ITERATION -> 5
+Node 0 -> PageRank 0.072991
+Node 1 -> PageRank 0.053083
+Node 2 -> PageRank 0.111574
+Node 3 -> PageRank 0.065410
+Node 4 -> PageRank 0.055470
+Node 5 -> PageRank 0.022602
+Node 6 -> PageRank 0.033581
+Node 7 -> PageRank 0.032111
+Node 8 -> PageRank 0.058351
+Node 9 -> PageRank 0.080153
+Node 10 -> PageRank 0.042709
+Node 11 -> PageRank 0.039479
+Node 12 -> PageRank 0.076784
+Node 13 -> PageRank 0.082195
+Node 14 -> PageRank 0.078025
+Node 15 -> PageRank 0.035601
+Node 16 -> PageRank 0.023649
+Node 17 -> PageRank 0.022602
+Node 18 -> PageRank 0.019336
+Node 19 -> PageRank 0.035749
+
+ITERATION -> 6
+Node 0 -> PageRank 0.073077
+Node 1 -> PageRank 0.053214
+Node 2 -> PageRank 0.111107
+Node 3 -> PageRank 0.064752
+Node 4 -> PageRank 0.055645
+Node 5 -> PageRank 0.022606
+Node 6 -> PageRank 0.033568
+Node 7 -> PageRank 0.032126
+Node 8 -> PageRank 0.058657
+Node 9 -> PageRank 0.080539
+Node 10 -> PageRank 0.042867
+Node 11 -> PageRank 0.039409
+Node 12 -> PageRank 0.076576
+Node 13 -> PageRank 0.081707
+Node 14 -> PageRank 0.078726
+Node 15 -> PageRank 0.035800
+Node 16 -> PageRank 0.023627
+Node 17 -> PageRank 0.022606
+Node 18 -> PageRank 0.019340
+Node 19 -> PageRank 0.035671
+
+ITERATION -> 7
+Node 0 -> PageRank 0.073099
+Node 1 -> PageRank 0.053170
+Node 2 -> PageRank 0.111287
+Node 3 -> PageRank 0.064972
+Node 4 -> PageRank 0.055592
+Node 5 -> PageRank 0.022605
+Node 6 -> PageRank 0.033593
+Node 7 -> PageRank 0.032139
+Node 8 -> PageRank 0.058590
+Node 9 -> PageRank 0.080445
+Node 10 -> PageRank 0.042798
+Node 11 -> PageRank 0.039466
+Node 12 -> PageRank 0.076609
+Node 13 -> PageRank 0.081866
+Node 14 -> PageRank 0.078372
+Node 15 -> PageRank 0.035704
+Node 16 -> PageRank 0.023649
+Node 17 -> PageRank 0.022605
+Node 18 -> PageRank 0.019339
+Node 19 -> PageRank 0.035737
+
+ITERATION -> 8
+Node 0 -> PageRank 0.073100
+Node 1 -> PageRank 0.053186
+Node 2 -> PageRank 0.111235
+Node 3 -> PageRank 0.064880
+Node 4 -> PageRank 0.055627
+Node 5 -> PageRank 0.022605
+Node 6 -> PageRank 0.033587
+Node 7 -> PageRank 0.032136
+Node 8 -> PageRank 0.058622
+Node 9 -> PageRank 0.080506
+Node 10 -> PageRank 0.042826
+Node 11 -> PageRank 0.039444
+Node 12 -> PageRank 0.076584
+Node 13 -> PageRank 0.081808
+Node 14 -> PageRank 0.078487
+Node 15 -> PageRank 0.035744
+Node 16 -> PageRank 0.023638
+Node 17 -> PageRank 0.022605
+Node 18 -> PageRank 0.019339
+Node 19 -> PageRank 0.035720
+
+ITERATION -> 9
+Node 0 -> PageRank 0.073104
+Node 1 -> PageRank 0.053181
+Node 2 -> PageRank 0.111260
+Node 3 -> PageRank 0.064917
+Node 4 -> PageRank 0.055617
+Node 5 -> PageRank 0.022606
+Node 6 -> PageRank 0.033590
+Node 7 -> PageRank 0.032137
+Node 8 -> PageRank 0.058617
+Node 9 -> PageRank 0.080492
+Node 10 -> PageRank 0.042816
+Node 11 -> PageRank 0.039454
+Node 12 -> PageRank 0.076594
+Node 13 -> PageRank 0.081831
+Node 14 -> PageRank 0.078445
+Node 15 -> PageRank 0.035729
+Node 16 -> PageRank 0.023643
+Node 17 -> PageRank 0.022606
+Node 18 -> PageRank 0.019339
+Node 19 -> PageRank 0.035732
+
+Obtained convergence after 9 iteration, here final results: 
+Nodo: 0, PageRank: 0.073104
+Nodo: 1, PageRank: 0.053181
+Nodo: 2, PageRank: 0.111260
+Nodo: 3, PageRank: 0.064917
+Nodo: 4, PageRank: 0.055617
+Nodo: 5, PageRank: 0.022606
+Nodo: 6, PageRank: 0.033590
+Nodo: 7, PageRank: 0.032137
+Nodo: 8, PageRank: 0.058617
+Nodo: 9, PageRank: 0.080492
+Nodo: 10, PageRank: 0.042816
+Nodo: 11, PageRank: 0.039454
+Nodo: 12, PageRank: 0.076594
+Nodo: 13, PageRank: 0.081831
+Nodo: 14, PageRank: 0.078445
+Nodo: 15, PageRank: 0.035729
+Nodo: 16, PageRank: 0.023643
+Nodo: 17, PageRank: 0.022606
+Nodo: 18, PageRank: 0.019339
+Nodo: 19, PageRank: 0.035732
+
+--Consistency check--
+Sum of pageRank values: 1.041710
+
+Page rank algorithm run is done, bye bye
+----------------------------------------------------

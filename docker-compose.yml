@@ -63,6 +63,19 @@ services:
     networks:
       - my-network
 
+   app-mapper-5:
+    build:
+      context: ./Mapper
+    ports:
+      - "9005:9005"  # Assegna porte univoche ai Mapper
+      - "50005:50005"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - MAPPER_PORT=9005
+      - HB_PORT=50005
+    networks:
+      - my-network
+
    app-reducer-1:
     build:
       context: ./Reducer

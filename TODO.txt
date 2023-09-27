@@ -7,6 +7,7 @@ to pageRank formula. OK
 5) Make the number of container a parameter OK
 6) Manage the load balancing and the request over different container etc OK done by round robin
 7) Understand why doesn't work connection with worker server. OK
-8) Move all parameters into configuration.json and read from that.
+8) Move all parameters into configuration.json and read from that. OK
 9) Add health-check control, to verify if all containers are still up, other-whise, remove them from
-ring, (fault tollerance)
+ring, (fault tollerance) OK
+10) Creat a script, output.go that copies from EC2 to S3 bucket the output. OK

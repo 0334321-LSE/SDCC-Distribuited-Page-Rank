@@ -21,6 +21,8 @@ type Config struct {
 	NumNodes      int     `json:"num_nodes"`
 	EdgesToAttach int     `json:"edges_to_attach"`
 	Seed          int64   `json:"seed"`
+	Bucket        string  `json:"bucket"`
+	Region        string  `json:"region"`
 }
 
 func ReadJsonConfig(config *Config) {

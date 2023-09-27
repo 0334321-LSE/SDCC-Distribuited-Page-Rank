@@ -1,5 +1,5 @@
 {
-    "num_mapper": 4,
+    "num_mapper": 5,
     "num_reducer": 2,
     "mapper_pn" : 9000,
     "mapper_hb_pn": 50000,
@@ -12,5 +12,7 @@
     "max_iteration" : 100,
     "num_nodes" : 20,
     "edges_to_attach" : 5,
-    "seed" : 5
+    "seed" : 4,
+    "bucket" : "sdcc-pagerank-bucket",
+    "region" : "us-east-1"
 }
