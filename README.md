@@ -49,6 +49,10 @@ Version V3 of the program produce output and leave it in output directory. <br /
 Version V4 is created to be executed on EC2-Instance, this one save the output into a zip file in a S3 bucket. <br />
 In configuration.json there are parameters for bucket name and region, must change if you want use it on your EC2 instance. <br />
 
+## Version
+Version 4.1 works on EC2 instances and saves the output into S3 bucket <br />
+Version 3.2 works also locally, doesn't save on S3 bucket. It can be used for debugging by running the main inside MasterLocal directory <br />
+
 ## Possible problem and how to solve
 ### Grpc file are missing
 To fix that must be installed protoc on your device. <br>
