@@ -93,9 +93,6 @@ func main() {
 			internal.WriteOnLog(logMessage)
 
 			for m, node := range graph {
-				if mapperRing.Len() == 0 {
-					log.Fatalf("No more container are avaible, try to re-run program")
-				}
 				chosen := internal.CheckIfMapperIsAlive(m, &connWithMapper, &mapperRing, &connWithMapperHb, &mapperHbRing)
 				// If at least one container is alive, launch map task
 				// Connection with MapperClient on ports 900X, for each node launch MAP job
@@ -118,9 +115,6 @@ func main() {
 
 			//----- REDUCER -> REDUCE -----
 			for m, node := range graph {
-				if reducerRing.Len() == 0 {
-					log.Fatalf("No more container are avaible, try to re-run program")
-				}
 				chosen := internal.CheckIfReducerIsAlive(m, &connWithReducer, &reducerRing, &connWithReducerHb, &reducerHbRing)
 				// If at least one container is alive, launch reduce task
 				// Connection with ReducerClient on ports 10000X, for each node launch REDUCE-job
@@ -143,9 +137,6 @@ func main() {
 
 			//----- MAPPER-> CLEAN UP -----
 			for m, node := range graph {
-				if mapperRing.Len() == 0 {
-					log.Fatalf("No more container are avaible, try to re-run program")
-				}
 				chosen := internal.CheckIfMapperIsAlive(m, &connWithMapper, &mapperRing, &connWithMapperHb, &mapperHbRing)
 				// If at least one container is alive, launch map clean up task
 				// Connection with MapperClient on ports 900X, for each node launch MAP-CLEAN job
@@ -164,9 +155,6 @@ func main() {
 
 			//----- REDUCER -> REDUCE-CLEANUP -----
 			for m, node := range graph {
-				if reducerRing.Len() == 0 {
-					log.Fatalf("No more container are avaible, try to re-run program")
-				}
 				chosen := internal.CheckIfReducerIsAlive(m, &connWithReducer, &reducerRing, &connWithReducerHb, &reducerHbRing)
 				// If at least one container is alive, launch reducer clean up task
 				// Connection with ReducerClient on ports 10000X, for each node launch REDUCE-CLEAN job

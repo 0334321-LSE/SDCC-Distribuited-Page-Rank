@@ -66,9 +66,10 @@ func FixMapsKeys(connWithMapper *map[int][]*grpc.ClientConn, connWithMapperHb *m
 func CheckIfMapperIsAlive(m int, connWithMapper *map[int][]*grpc.ClientConn, mapperRing **ring.Ring, connWithMapperHb *map[int][]*grpc.ClientConn, mapperHbRing **ring.Ring) int {
 
 	var chosen int
-	for alive := false; alive == false; {
+	index := 0
+	for alive := false; alive == false && index != (*mapperRing).Len(); {
 		//M % N.Container to establish which one must be chosen (round-robin)
-		chosen = m % (*mapperRing).Len()
+		chosen = (m + index) % (*mapperRing).Len()
 
 		// Connection with heartbeat service of chosen Mapper on port 5000X
 		// Set 5 second timeout
@@ -82,42 +83,31 @@ func CheckIfMapperIsAlive(m int, connWithMapper *map[int][]*grpc.ClientConn, map
 		if err != nil {
 			// If occurs a timeout
 			if status.Code(err) == codes.DeadlineExceeded {
-				log.Printf("\nTimeout expired, removed connection with Mapper container")
-				CleanMapperConn(chosen, connWithMapper, mapperRing, connWithMapperHb, mapperHbRing)
+				log.Printf("\nError when calling mapper-%d, try with another one", chosen+1)
 			} else {
 				// Otherwise if occurs some-other problem
-				log.Printf("\nError when calling mapper, removed connection with Mapper container")
-				CleanMapperConn(chosen, connWithMapper, mapperRing, connWithMapperHb, mapperHbRing)
+				log.Printf("\nError when calling mapper-%d, try with another one", chosen+1)
 			}
 		} else {
 			// If there isn't an error, container is alive
 			alive = response.GetAlive()
+			return chosen
 		}
+		index++
+	}
+	if index == (*mapperRing).Len() {
+		log.Fatalf("No more Mapper are available, try to re-start program")
 	}
 	return chosen
-}
-
-// CleanMapperConn -> drop connection data with broken mapper-container
-func CleanMapperConn(chosen int, connWithMapper *map[int][]*grpc.ClientConn, mapperRing **ring.Ring, connWithMapperHb *map[int][]*grpc.ClientConn, mapperHbRing **ring.Ring) {
-	// Remove container from rings
-	*mapperRing = RemoveFromRing(*mapperRing, chosen)
-	*mapperHbRing = RemoveFromRing(*mapperHbRing, chosen)
-
-	// Discard down-connections
-	delete(*connWithMapper, chosen)
-	delete(*connWithMapperHb, chosen)
-
-	// Fix keys of connection map
-	*connWithMapper = FixMapKeys(*connWithMapper, "Mapper")
-	*connWithMapperHb = FixMapKeys(*connWithMapperHb, "MapperHeartbeat")
 }
 
 // CheckIfReducerIsAlive -> as the name says, check by doing a ping if there is a reducer alive, return the id of the worker that must be called
 func CheckIfReducerIsAlive(m int, connWithReducer *map[int][]*grpc.ClientConn, reducerRing **ring.Ring, connWithReducerHb *map[int][]*grpc.ClientConn, reducerHbRing **ring.Ring) int {
 	var chosen int
-	for alive := false; alive == false; {
+	index := 0
+	for alive := false; alive == false && (*reducerRing).Len() != index; {
 		//M % N.Container to establish which one must be chosen (round-robin)
-		chosen = m % (*reducerRing).Len()
+		chosen = (m + index) % (*reducerRing).Len()
 
 		// Connection with heartbeat service of chosen Mapper on port 5000X
 		// Set 5 second timeout
@@ -131,34 +121,22 @@ func CheckIfReducerIsAlive(m int, connWithReducer *map[int][]*grpc.ClientConn, r
 		if err != nil {
 			// If occurs a timeout
 			if status.Code(err) == codes.DeadlineExceeded {
-				log.Printf("\nTimeout expired, removed connection with container")
-				CleanReducerConn(chosen, connWithReducer, reducerRing, connWithReducerHb, reducerHbRing)
+				log.Printf("\nError when calling reducer-%d, try with another one", chosen+1)
 			} else {
 				// Otherwise if occurs some-other problem
-				log.Printf("\nError when calling reducer, removed connection with  Reducer container")
-				CleanReducerConn(chosen, connWithReducer, reducerRing, connWithReducerHb, reducerHbRing)
+				log.Printf("\nError when calling reducer-%d, try with another one", chosen+1)
 			}
 		} else {
 			// If there isn't an error, container is alive
 			alive = response.Alive
+			return chosen
 		}
+		index++
+	}
+	if (*reducerRing).Len() == index {
+		log.Fatalf("No more Reducer are available, try to re-start program")
 	}
 	return chosen
-}
-
-// CleanReducerConn -> drop connection data with broken reducer-container
-func CleanReducerConn(chosen int, connWithReducer *map[int][]*grpc.ClientConn, reducerRing **ring.Ring, connWithReducerHb *map[int][]*grpc.ClientConn, reducerHbRing **ring.Ring) {
-	// Remove container from rings
-	*reducerRing = RemoveFromRing(*reducerRing, chosen)
-	*reducerHbRing = RemoveFromRing(*reducerHbRing, chosen)
-
-	// Discard down-connections
-	delete(*connWithReducer, chosen)
-	delete(*connWithReducerHb, chosen)
-
-	// Fix keys of connection map
-	*connWithReducer = FixMapKeys(*connWithReducer, "Reducer")
-	*connWithReducerHb = FixMapKeys(*connWithReducerHb, "ReducerHeartbeat")
 }
 
 // CloseClientConn -> close all the opened client connections

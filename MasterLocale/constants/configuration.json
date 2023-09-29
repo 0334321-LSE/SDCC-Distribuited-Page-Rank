@@ -12,5 +12,5 @@
     "max_iteration" : 100,
     "num_nodes" : 20,
     "edges_to_attach" : 5,
-    "seed" : 4
+    "seed" : 5
 }
