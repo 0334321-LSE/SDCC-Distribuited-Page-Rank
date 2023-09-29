@@ -1,0 +1,40 @@
+// mapper.proto
+syntax = "proto3";
+
+option go_package = "./mapper";
+
+service Mapper {
+  rpc Map(MapperInput) returns (MapperOutput);
+  rpc CleanUp(CleanUpInput) returns (CleanUpOutput);
+}
+
+message MapperInput {
+  float page_rank = 1;
+  repeated int32 adjacency_list = 2;
+}
+
+message MapperOutput {
+  float page_rank_share = 1;
+  repeated int32 adjacency_list = 2;
+}
+
+message CleanUpInput {
+  float page_rank = 1;
+  repeated int32 adjacency_list = 2;
+}
+
+message CleanUpOutput {
+  float sink_mass = 1;
+}
+
+service MapperHeartbeat {
+  rpc Ping(MapperHeartbeatRequest) returns (MapperHeartbeatResponse);
+}
+
+message MapperHeartbeatRequest{
+  bool alive = 1;
+}
+
+message MapperHeartbeatResponse{
+  bool alive = 1;
+}

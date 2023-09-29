@@ -16,6 +16,7 @@ type Config struct {
 	DampingFactor float32 `json:"damping_factor"`
 	Epsilon       float32 `json:"epsilon"`
 	GraphPath     string  `json:"graph_path"`
+	LogPath       string  `json:"log_path"`
 	MaxIteration  int     `json:"max_iteration"`
 	NumNodes      int     `json:"num_nodes"`
 	EdgesToAttach int     `json:"edges_to_attach"`
