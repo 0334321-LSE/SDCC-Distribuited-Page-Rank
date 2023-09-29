@@ -10,6 +10,7 @@ To install the application execute:<br>
 To run the programs you must have installed:<br>
 - Go, in particular, the project is written with SDK 1.19.3
 - Docker & Docker-Compose
+- AWS CLI
 
 ## Structure
 There are three main parts:<br>
