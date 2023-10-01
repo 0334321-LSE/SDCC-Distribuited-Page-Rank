@@ -286,7 +286,7 @@ func writeAdjacencyListToFile(graph map[int][]int, filename string) error {
 }
 
 // CreateRandomGraph -> generate a graph randomly by using GraphGenerator, return adjacency list into a map
-func CreateRandomGraph(numNodes int, edgesToAttach int, seed int64) map[int][]int {
+func CreateRandomGraph(numNodes int, edgesToAttach int, seed int64, print bool) map[int][]int {
 	var config constants.Config
 	constants.ReadJsonConfig(&config)
 	// Generate graph by using Barabasi-Albert.
@@ -312,6 +312,8 @@ func CreateRandomGraph(numNodes int, edgesToAttach int, seed int64) map[int][]in
 	log.Printf("List saved as graph.txt")
 
 	// Plot and save the graph
-	plotGraph(graph)
+	if print == true {
+		plotGraph(graph)
+	}
 	return graph
 }
