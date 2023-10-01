@@ -7,11 +7,11 @@ To install the application execute:<br>
     git clone https://github.com/0334321-LSE/SDCC-Distribuited-Page-Rank.git
 
 ## Requirements
-To run the programs you must have installed on your EC2 instance:<br>
+To run the programs you must have installed on your EC2 instance:
 - Go, in particular, the project is written with SDK 1.19.3
 - Docker & Docker-Compose
 - AWS CLI
-- Zip
+- Zip 
 
 ## Structure
 There are three main parts:<br>
@@ -28,6 +28,7 @@ It contains all the constants and parameters used like: <br>
 - Seed and other parameters for graph generation
 - Constants for pagerank algorithm
 - Assigned port for Map and Reduce service 
+- Flag for able service like graph plotting or saving on s3
 
 ## Run and close the application
 To run the application there are different ways. <br>
@@ -36,7 +37,7 @@ Then, according to needs:
 - "pagerank.go" generate docker-compose.yml, so must be used when the number of container changes.<br>
 After the execution, workers will remain up, other parameters can be changed, and new execution can <br>
 be done by using  "docker-compose up app-master" <br>
-- Is also possible to launch manually the program by using : "docker-compose up --build" in the same root of .yml file. <br>
+- Is also possible to launch manually the program by using : "docker-compose up --build" in the same directory of .yml file. <br>
 In this case is not possible to modify the number of containers so don't do that. <br>
 
 To close all the container use : "docker-compose stop" <br>
@@ -47,15 +48,18 @@ change parameters in configuration.json and then launch pagerank.go to create a 
 
 ## Application output
 The application has a logging system and produces some output, all those things are in output directory. <br>
-Version V3 of the program produce output and leave it in output directory. <br />
-Version V4 is created to be executed on EC2-Instance, this one save the output into a zip file in a S3 bucket. <br />
+Version V4.3 is created to be executed on EC2-Instance, but also has a master for local execution. <br />
 In configuration.json there are parameters for bucket name and region, must change if you want use it on your EC2 instance. <br />
+Also is possible to disable saving data into S3, by edit the parameter in configuration.json <br />
 
 ## Version
-Version 4.2 works on EC2 instances, it can save the output into S3 bucket by setting the property on configuration.json <br />
-Also has a local master that can be executed locally for testing or debugging
-Version 2 works only locally, doesn't use containers. It can be used to check if the results are right.
+Version 4.3 works on EC2 instances with containers, it is the latest version.  <br />
+Version 2 works only locally, doesn't use containers. It can be used to check if the results are right. Obviously slower and less powerful. <br /> 
 ## Possible problem and how to solve
+### Algorithm takes too long
+If you are trying to analyze big graph and the program takes too long try to disable graph plotting <br />
+Is not optimized, it can take too long for large graph, is suggested to disable for more than 20 nodes. <br />
+
 ### Grpc file are missing
 To fix that must be installed protoc on your device. <br>
 If grpc files are missing go in  ' ./Mapper/mapper ' <br>
@@ -67,6 +71,6 @@ Do the same things for reducer in ' ./Reducer/reducer ' <br>
 
 ### Saving on S3
 The program is projected to be executed con EC2 instances, so try to save
-on S3 while the program is executing locally doesn't work.
+on S3 while the program is executing locally doesn't work **if** you are **not logged** in by aws cli.
 
 
