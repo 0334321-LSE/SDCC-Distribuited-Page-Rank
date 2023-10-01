@@ -76,6 +76,201 @@ services:
     networks:
       - my-network
 
+   app-mapper-6:
+    build:
+      context: ./Mapper
+    ports:
+      - "9006:9006"  # Assegna porte univoche ai Mapper
+      - "50006:50006"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - MAPPER_PORT=9006
+      - HB_PORT=50006
+    networks:
+      - my-network
+
+   app-mapper-7:
+    build:
+      context: ./Mapper
+    ports:
+      - "9007:9007"  # Assegna porte univoche ai Mapper
+      - "50007:50007"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - MAPPER_PORT=9007
+      - HB_PORT=50007
+    networks:
+      - my-network
+
+   app-mapper-8:
+    build:
+      context: ./Mapper
+    ports:
+      - "9008:9008"  # Assegna porte univoche ai Mapper
+      - "50008:50008"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - MAPPER_PORT=9008
+      - HB_PORT=50008
+    networks:
+      - my-network
+
+   app-mapper-9:
+    build:
+      context: ./Mapper
+    ports:
+      - "9009:9009"  # Assegna porte univoche ai Mapper
+      - "50009:50009"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - MAPPER_PORT=9009
+      - HB_PORT=50009
+    networks:
+      - my-network
+
+   app-mapper-10:
+    build:
+      context: ./Mapper
+    ports:
+      - "9010:9010"  # Assegna porte univoche ai Mapper
+      - "50010:50010"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - MAPPER_PORT=9010
+      - HB_PORT=50010
+    networks:
+      - my-network
+
+   app-mapper-11:
+    build:
+      context: ./Mapper
+    ports:
+      - "9011:9011"  # Assegna porte univoche ai Mapper
+      - "50011:50011"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - MAPPER_PORT=9011
+      - HB_PORT=50011
+    networks:
+      - my-network
+
+   app-mapper-12:
+    build:
+      context: ./Mapper
+    ports:
+      - "9012:9012"  # Assegna porte univoche ai Mapper
+      - "50012:50012"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - MAPPER_PORT=9012
+      - HB_PORT=50012
+    networks:
+      - my-network
+
+   app-mapper-13:
+    build:
+      context: ./Mapper
+    ports:
+      - "9013:9013"  # Assegna porte univoche ai Mapper
+      - "50013:50013"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - MAPPER_PORT=9013
+      - HB_PORT=50013
+    networks:
+      - my-network
+
+   app-mapper-14:
+    build:
+      context: ./Mapper
+    ports:
+      - "9014:9014"  # Assegna porte univoche ai Mapper
+      - "50014:50014"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - MAPPER_PORT=9014
+      - HB_PORT=50014
+    networks:
+      - my-network
+
+   app-mapper-15:
+    build:
+      context: ./Mapper
+    ports:
+      - "9015:9015"  # Assegna porte univoche ai Mapper
+      - "50015:50015"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - MAPPER_PORT=9015
+      - HB_PORT=50015
+    networks:
+      - my-network
+
+   app-mapper-16:
+    build:
+      context: ./Mapper
+    ports:
+      - "9016:9016"  # Assegna porte univoche ai Mapper
+      - "50016:50016"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - MAPPER_PORT=9016
+      - HB_PORT=50016
+    networks:
+      - my-network
+
+   app-mapper-17:
+    build:
+      context: ./Mapper
+    ports:
+      - "9017:9017"  # Assegna porte univoche ai Mapper
+      - "50017:50017"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - MAPPER_PORT=9017
+      - HB_PORT=50017
+    networks:
+      - my-network
+
+   app-mapper-18:
+    build:
+      context: ./Mapper
+    ports:
+      - "9018:9018"  # Assegna porte univoche ai Mapper
+      - "50018:50018"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - MAPPER_PORT=9018
+      - HB_PORT=50018
+    networks:
+      - my-network
+
+   app-mapper-19:
+    build:
+      context: ./Mapper
+    ports:
+      - "9019:9019"  # Assegna porte univoche ai Mapper
+      - "50019:50019"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - MAPPER_PORT=9019
+      - HB_PORT=50019
+    networks:
+      - my-network
+
+   app-mapper-20:
+    build:
+      context: ./Mapper
+    ports:
+      - "9020:9020"  # Assegna porte univoche ai Mapper
+      - "50020:50020"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - MAPPER_PORT=9020
+      - HB_PORT=50020
+    networks:
+      - my-network
+
    app-reducer-1:
     build:
       context: ./Reducer
@@ -103,6 +298,276 @@ services:
       - TZ=Europe/Rome
       - REDUCER_PORT=10002
       - HB_PORT=51002
+    networks:
+      - my-network
+
+   app-reducer-3:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10003:10003"  # Assegna porte univoche ai reducer
+      - "51003:51003"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10003
+      - HB_PORT=51003
+    networks:
+      - my-network
+
+   app-reducer-4:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10004:10004"  # Assegna porte univoche ai reducer
+      - "51004:51004"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10004
+      - HB_PORT=51004
+    networks:
+      - my-network
+
+   app-reducer-5:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10005:10005"  # Assegna porte univoche ai reducer
+      - "51005:51005"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10005
+      - HB_PORT=51005
+    networks:
+      - my-network
+
+   app-reducer-6:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10006:10006"  # Assegna porte univoche ai reducer
+      - "51006:51006"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10006
+      - HB_PORT=51006
+    networks:
+      - my-network
+
+   app-reducer-7:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10007:10007"  # Assegna porte univoche ai reducer
+      - "51007:51007"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10007
+      - HB_PORT=51007
+    networks:
+      - my-network
+
+   app-reducer-8:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10008:10008"  # Assegna porte univoche ai reducer
+      - "51008:51008"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10008
+      - HB_PORT=51008
+    networks:
+      - my-network
+
+   app-reducer-9:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10009:10009"  # Assegna porte univoche ai reducer
+      - "51009:51009"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10009
+      - HB_PORT=51009
+    networks:
+      - my-network
+
+   app-reducer-10:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10010:10010"  # Assegna porte univoche ai reducer
+      - "51010:51010"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10010
+      - HB_PORT=51010
+    networks:
+      - my-network
+
+   app-reducer-11:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10011:10011"  # Assegna porte univoche ai reducer
+      - "51011:51011"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10011
+      - HB_PORT=51011
+    networks:
+      - my-network
+
+   app-reducer-12:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10012:10012"  # Assegna porte univoche ai reducer
+      - "51012:51012"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10012
+      - HB_PORT=51012
+    networks:
+      - my-network
+
+   app-reducer-13:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10013:10013"  # Assegna porte univoche ai reducer
+      - "51013:51013"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10013
+      - HB_PORT=51013
+    networks:
+      - my-network
+
+   app-reducer-14:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10014:10014"  # Assegna porte univoche ai reducer
+      - "51014:51014"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10014
+      - HB_PORT=51014
+    networks:
+      - my-network
+
+   app-reducer-15:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10015:10015"  # Assegna porte univoche ai reducer
+      - "51015:51015"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10015
+      - HB_PORT=51015
+    networks:
+      - my-network
+
+   app-reducer-16:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10016:10016"  # Assegna porte univoche ai reducer
+      - "51016:51016"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10016
+      - HB_PORT=51016
+    networks:
+      - my-network
+
+   app-reducer-17:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10017:10017"  # Assegna porte univoche ai reducer
+      - "51017:51017"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10017
+      - HB_PORT=51017
+    networks:
+      - my-network
+
+   app-reducer-18:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10018:10018"  # Assegna porte univoche ai reducer
+      - "51018:51018"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10018
+      - HB_PORT=51018
+    networks:
+      - my-network
+
+   app-reducer-19:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10019:10019"  # Assegna porte univoche ai reducer
+      - "51019:51019"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10019
+      - HB_PORT=51019
+    networks:
+      - my-network
+
+   app-reducer-20:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10020:10020"  # Assegna porte univoche ai reducer
+      - "51020:51020"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10020
+      - HB_PORT=51020
     networks:
       - my-network
 

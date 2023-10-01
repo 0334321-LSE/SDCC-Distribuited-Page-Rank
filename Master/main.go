@@ -22,7 +22,7 @@ func main() {
 	logMessage := fmt.Sprintf("\n%s \n- Starting pagerank algorithm -", time.Now().Format("2006-01-02 15:04:05"))
 	internal.WriteOnLog(logMessage)
 
-	internal.CreateRandomGraph(config.NumNodes, config.EdgesToAttach, config.Seed, true)
+	internal.CreateRandomGraph(config.NumNodes, config.EdgesToAttach, config.Seed, config.PrintGraph)
 
 	graph := internal.Convert(config.GraphPath)
 	if graph == nil {
@@ -270,7 +270,10 @@ func main() {
 
 	log.Print("\n--Consistency check--\nSum of pageRank values: ", pageRankSum)
 	internal.WriteOnLog(fmt.Sprintf("\n\n--Consistency check--\nSum of pageRank values: %f", pageRankSum))
-	internal.PlotGraphByPageRank(graph)
+	if config.PrintGraph == true {
+		internal.PlotGraphByPageRank(graph)
+	}
+
 	internal.WriteOnLog("\n\nPage rank algorithm run is done, bye bye\n")
 	internal.WriteOnLog("----------------------------------------------------")
 
