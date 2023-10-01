@@ -14,5 +14,6 @@
     "edges_to_attach" : 5,
     "seed" : 4,
     "bucket" : "sdcc-pagerank-bucket",
-    "region" : "us-east-1"
+    "region" : "us-east-1",
+    "save_on_bucket" : true
 }

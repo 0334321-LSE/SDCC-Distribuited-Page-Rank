@@ -274,6 +274,11 @@ func main() {
 	internal.WriteOnLog("\n\nPage rank algorithm run is done, bye bye\n")
 	internal.WriteOnLog("----------------------------------------------------")
 
+	if config.SaveOnBucket == true {
+		internal.SaveOutputOnS3()
+		internal.WriteOnLog(fmt.Sprintf("\nSaved result on %s\n", config.Bucket))
+	}
+
 	elapsed := time.Since(start)
 	log.Printf("\nPageRank algorithm tooks: %s", elapsed)
 }

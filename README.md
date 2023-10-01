@@ -7,10 +7,11 @@ To install the application execute:<br>
     git clone https://github.com/0334321-LSE/SDCC-Distribuited-Page-Rank.git
 
 ## Requirements
-To run the programs you must have installed:<br>
+To run the programs you must have installed on your EC2 instance:<br>
 - Go, in particular, the project is written with SDK 1.19.3
 - Docker & Docker-Compose
 - AWS CLI
+- Zip
 
 ## Structure
 There are three main parts:<br>
@@ -51,8 +52,8 @@ Version V4 is created to be executed on EC2-Instance, this one save the output i
 In configuration.json there are parameters for bucket name and region, must change if you want use it on your EC2 instance. <br />
 
 ## Version
-Version 4.1 works on EC2 instances and saves the output into S3 bucket <br />
-Version 3.2 works also locally, doesn't save on S3 bucket. It can be used for debugging by running the main inside MasterLocal directory <br />
+Version 4.2 works on EC2 instances, it can save the output into S3 bucket by setting the property on configuration.json <br />
+Also has a local master that can be executed locally for testing or debugging
 Version 2 works only locally, doesn't use containers. It can be used to check if the results are right.
 ## Possible problem and how to solve
 ### Grpc file are missing
@@ -63,5 +64,9 @@ Generate pb files with: <br>
     - "protoc --go-grpc_out=. .\mapper.proto"
 Another directory called mapper will be created, copy the files outside (into ./Mapper/mapper).<br>
 Do the same things for reducer in ' ./Reducer/reducer ' <br>
+
+### Saving on S3
+The program is projected to be executed con EC2 instances, so try to save
+on S3 while the program is executing locally doesn't work.
 
 

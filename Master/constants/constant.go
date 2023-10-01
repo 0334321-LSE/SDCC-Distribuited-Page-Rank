@@ -23,6 +23,7 @@ type Config struct {
 	Seed          int64   `json:"seed"`
 	Bucket        string  `json:"bucket"`
 	Region        string  `json:"region"`
+	SaveOnBucket  bool    `json:"save_on_bucket"`
 }
 
 func ReadJsonConfig(config *Config) {
