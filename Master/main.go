@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"google.golang.org/grpc"
 	"log"
+	"sync"
 	"time"
 )
 
@@ -21,7 +22,7 @@ func main() {
 	logMessage := fmt.Sprintf("\n%s \n- Starting pagerank algorithm -", time.Now().Format("2006-01-02 15:04:05"))
 	internal.WriteOnLog(logMessage)
 
-	internal.CreateRandomGraph(config.NumNodes, config.EdgesToAttach, config.Seed)
+	internal.CreateRandomGraph(config.NumNodes, config.EdgesToAttach, config.Seed, true)
 
 	graph := internal.Convert(config.GraphPath)
 	if graph == nil {
@@ -79,8 +80,18 @@ func main() {
 	// Fix potential holes in map
 	internal.FixMapsKeys(&connWithMapper, &connWithMapperHb, &connWithReducer, &connWithReducerHb)
 
+	// output results
+	mapperOutputArrayList := make([]*mapper.MapperOutput, config.NumNodes)
+	reducerOutputArrayList := make([]*reducer.ReducerOutput, config.NumNodes)
+	mapperCleanUpOutputArrayList := make([]*mapper.CleanUpOutput, config.NumNodes)
+	reducerCleanUpOutputArrayList := make([]*reducer.ReducerOutput, config.NumNodes)
+
+	// To synchronize go routines
+	var wg sync.WaitGroup
+
 	for !convergence || iteration == config.MaxIteration {
 		func() {
+
 			iteration++
 			aggregatePageRankShares := make(map[int][]float32)
 			sinkMass := 0.0
@@ -93,96 +104,127 @@ func main() {
 			internal.WriteOnLog(logMessage)
 
 			for m, node := range graph {
-				if mapperRing.Len() == 0 {
-					log.Fatalf("No more container are avaible, try to re-run program")
-				}
-				chosen := internal.CheckIfMapperIsAlive(m, &connWithMapper, &mapperRing, &connWithMapperHb, &mapperHbRing)
-				// If at least one container is alive, launch map task
-				// Connection with MapperClient on ports 900X, for each node launch MAP job
-				mapperConnection := mapper.NewMapperClient(connWithMapper[chosen][0])
-				// Now is connected with I-TH container, launch map task
-				mapperInput := mapper.MapperInput{
-					PageRank:      float32(node.PageRank),
-					AdjacencyList: internal.GetOutLinks(node),
-				}
-				mapperOutput, err := mapperConnection.Map(context.Background(), &mapperInput)
-				if err != nil {
-					log.Fatalf("Error when calling Map function: %v", err)
-				}
-				//Shuffle parts of map-reduce paradigm
-				for _, node := range mapperOutput.GetAdjacencyList() {
+				node := node
+				m := m
+				wg.Add(1)
+				go func() {
+					defer wg.Done()
+					chosen := internal.CheckIfMapperIsAlive(m, &connWithMapper, &mapperRing, &connWithMapperHb, &mapperHbRing)
+					// If at least one container is alive, launch map task
+					// Connection with MapperClient on ports 900X, for each node launch MAP job
+					mapperConnection := mapper.NewMapperClient(connWithMapper[chosen][0])
+					// Now is connected with I-TH container, launch map task
+					mapperInput := mapper.MapperInput{
+						PageRank:      float32(node.PageRank),
+						AdjacencyList: internal.GetOutLinks(node),
+					}
+					mapperOutput, err := mapperConnection.Map(context.Background(), &mapperInput)
+					mapperOutputArrayList[node.ID] = mapperOutput
+					if err != nil {
+						log.Fatalf("Error when calling Map function: %v", err)
+					}
+				}()
+			}
+			wg.Wait()
+			//Shuffle parts of map-reduce paradigm
+			// For each node in the graph save its contributes to other nodes
+			for _, graphNode := range graph {
+				for _, node := range mapperOutputArrayList[graphNode.ID].GetAdjacencyList() {
 					//Update page rank aggregate table by appending for each node in the mapper output corresponding share
-					aggregatePageRankShares[int(node)] = append(aggregatePageRankShares[int(node)], mapperOutput.PageRankShare)
+					aggregatePageRankShares[int(node)] = append(aggregatePageRankShares[int(node)], mapperOutputArrayList[graphNode.ID].PageRankShare)
 				}
 			}
 
 			//----- REDUCER -> REDUCE -----
 			for m, node := range graph {
-				if reducerRing.Len() == 0 {
-					log.Fatalf("No more container are avaible, try to re-run program")
-				}
-				chosen := internal.CheckIfReducerIsAlive(m, &connWithReducer, &reducerRing, &connWithReducerHb, &reducerHbRing)
-				// If at least one container is alive, launch reduce task
-				// Connection with ReducerClient on ports 10000X, for each node launch REDUCE-job
-				reducerConnection := reducer.NewReducerClient(connWithReducer[chosen][0])
-				// Now is connected with I-TH container, launch map task
-				reducerInput := reducer.ReducerInput{
-					NodeId:         int32(node.ID),
-					PageRankShares: aggregatePageRankShares[node.ID],
-					GraphSize:      int32(numNodes),
-				}
-				reducerOutput, err := reducerConnection.Reduce(context.Background(), &reducerInput)
-				if err != nil {
-					log.Fatalf("Error when calling Reduce function: %s", err)
-				}
+				node := node
+				m := m
+				wg.Add(1)
+				go func() {
+					defer wg.Done()
+					chosen := internal.CheckIfReducerIsAlive(m, &connWithReducer, &reducerRing, &connWithReducerHb, &reducerHbRing)
+					// If at least one container is alive, launch reduce task
+					// Connection with ReducerClient on ports 10000X, for each node launch REDUCE-job
+					reducerConnection := reducer.NewReducerClient(connWithReducer[chosen][0])
+					// Now is connected with I-TH container, launch map task
+					reducerInput := reducer.ReducerInput{
+						NodeId:         int32(node.ID),
+						PageRankShares: aggregatePageRankShares[node.ID],
+						GraphSize:      int32(numNodes),
+					}
+					reducerOutput, err := reducerConnection.Reduce(context.Background(), &reducerInput)
+					reducerOutputArrayList[node.ID] = reducerOutput
+					if err != nil {
+						log.Fatalf("Error when calling Reduce function: %s", err)
+					}
+				}()
+			}
+			wg.Wait()
+			for _, node := range graph {
 				//Update node page rank value
-				node.PageRank = float64(reducerOutput.NewRankValue)
+				node.PageRank = float64(reducerOutputArrayList[node.ID].NewRankValue)
 			}
 
 			//----- CLEAN UP PHASE -----
 
 			//----- MAPPER-> CLEAN UP -----
 			for m, node := range graph {
-				if mapperRing.Len() == 0 {
-					log.Fatalf("No more container are avaible, try to re-run program")
-				}
-				chosen := internal.CheckIfMapperIsAlive(m, &connWithMapper, &mapperRing, &connWithMapperHb, &mapperHbRing)
-				// If at least one container is alive, launch map clean up task
-				// Connection with MapperClient on ports 900X, for each node launch MAP-CLEAN job
-				mapperConnection := mapper.NewMapperClient(connWithMapper[chosen][0])
-				mapperInput := mapper.CleanUpInput{
-					PageRank:      float32(node.PageRank),
-					AdjacencyList: internal.GetOutLinks(node),
-				}
-				//Sums sink's mass
-				cleanUpOutput, err := mapperConnection.CleanUp(context.Background(), &mapperInput)
-				sinkMass += float64(cleanUpOutput.SinkMass)
-				if err != nil {
-					log.Fatalf("Error when calling Map function: %s", err)
-				}
+				node := node
+				m := m
+				wg.Add(1)
+				go func() {
+					defer wg.Done()
+					chosen := internal.CheckIfMapperIsAlive(m, &connWithMapper, &mapperRing, &connWithMapperHb, &mapperHbRing)
+					// If at least one container is alive, launch map clean up task
+					// Connection with MapperClient on ports 900X, for each node launch MAP-CLEAN job
+					mapperConnection := mapper.NewMapperClient(connWithMapper[chosen][0])
+					mapperInput := mapper.CleanUpInput{
+						PageRank:      float32(node.PageRank),
+						AdjacencyList: internal.GetOutLinks(node),
+					}
+					//Sums sink's mass
+					cleanUpOutput, err := mapperConnection.CleanUp(context.Background(), &mapperInput)
+					mapperCleanUpOutputArrayList[node.ID] = cleanUpOutput
+					if err != nil {
+						log.Fatalf("Error when calling Map function: %s", err)
+					}
+				}()
+			}
+
+			wg.Wait()
+			for _, node := range graph {
+				sinkMass += float64(mapperCleanUpOutputArrayList[node.ID].SinkMass)
 			}
 
 			//----- REDUCER -> REDUCE-CLEANUP -----
 			for m, node := range graph {
-				if reducerRing.Len() == 0 {
-					log.Fatalf("No more container are avaible, try to re-run program")
-				}
-				chosen := internal.CheckIfReducerIsAlive(m, &connWithReducer, &reducerRing, &connWithReducerHb, &reducerHbRing)
-				// If at least one container is alive, launch reducer clean up task
-				// Connection with ReducerClient on ports 10000X, for each node launch REDUCE-CLEAN job
-				reducerConnection := reducer.NewReducerClient(connWithReducer[chosen][0])
-				reducerCleanUpInput := reducer.ReducerCleanUpInput{
-					NodeId:          int32(node.ID),
-					CurrentPageRank: float32(node.PageRank),
-					GraphSize:       int32(numNodes),
-					SinkMass:        float32(sinkMass),
-				}
-				reducerOutput, err := reducerConnection.ReduceCleanUp(context.Background(), &reducerCleanUpInput)
-				if err != nil {
-					log.Fatalf("Error when calling Reduce function: %s", err)
-				}
+				m := m
+				node := node
+				wg.Add(1)
+				go func() {
+					defer wg.Done()
+					chosen := internal.CheckIfReducerIsAlive(m, &connWithReducer, &reducerRing, &connWithReducerHb, &reducerHbRing)
+					// If at least one container is alive, launch reducer clean up task
+					// Connection with ReducerClient on ports 10000X, for each node launch REDUCE-CLEAN job
+					reducerConnection := reducer.NewReducerClient(connWithReducer[chosen][0])
+					reducerCleanUpInput := reducer.ReducerCleanUpInput{
+						NodeId:          int32(node.ID),
+						CurrentPageRank: float32(node.PageRank),
+						GraphSize:       int32(numNodes),
+						SinkMass:        float32(sinkMass),
+					}
+					reducerOutput, err := reducerConnection.ReduceCleanUp(context.Background(), &reducerCleanUpInput)
+					reducerCleanUpOutputArrayList[node.ID] = reducerOutput
+					if err != nil {
+						log.Fatalf("Error when calling Reduce function: %s", err)
+					}
+				}()
+			}
+
+			wg.Wait()
+			for _, node := range graph {
 				//Update node page rank value
-				node.PageRank = float64(reducerOutput.NewRankValue)
+				node.PageRank = float64(reducerCleanUpOutputArrayList[node.ID].NewRankValue)
 			}
 
 			//Get new page rank to check the differences between the old ones
