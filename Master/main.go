@@ -89,7 +89,7 @@ func main() {
 	// To synchronize go routines
 	var wg sync.WaitGroup
 
-	for !convergence || iteration == config.MaxIteration {
+	for !convergence || iteration < config.MaxIteration {
 		func() {
 
 			iteration++
