@@ -304,6 +304,6 @@ func CreateRandomGraph(numNodes int, edgesToAttach int, seed int64) map[int][]in
 	log.Printf("List saved as graph.tx")
 
 	// Plot and save the graph
-	plotGraph(graph)
+	//plotGraph(graph)
 	return graph
 }
