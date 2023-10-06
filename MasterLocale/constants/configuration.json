@@ -10,11 +10,12 @@
     "graph_path" : "./output/graph.txt",
     "log_path" : "./output/log.txt",
     "max_iteration" : 100,
-    "num_nodes" : 20,
+    "num_nodes" : 1000,
     "edges_to_attach" : 5,
     "seed" : 4,
     "bucket" : "sdcc-pagerank-bucket",
     "region" : "us-east-1",
     "save_on_bucket" : false,
-    "print_graph" : true
+    "print_graph" : false,
+    "locally" : true
 }

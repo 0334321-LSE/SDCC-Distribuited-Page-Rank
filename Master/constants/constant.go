@@ -25,6 +25,7 @@ type Config struct {
 	Region        string  `json:"region"`
 	SaveOnBucket  bool    `json:"save_on_bucket"`
 	PrintGraph    bool    `json:"print_graph"`
+	Locally       bool    `json:"locally"`
 }
 
 func ReadJsonConfig(config *Config) {

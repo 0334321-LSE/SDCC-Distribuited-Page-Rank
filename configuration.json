@@ -16,5 +16,6 @@
     "bucket" : "sdcc-pagerank-bucket",
     "region" : "us-east-1",
     "save_on_bucket" : false,
-    "print_graph" : true
+    "print_graph" : true,
+    "locally" : true
 }

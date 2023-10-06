@@ -20,11 +20,12 @@ type Config struct {
 	MaxIteration  int     `json:"max_iteration"`
 	NumNodes      int     `json:"num_nodes"`
 	EdgesToAttach int     `json:"edges_to_attach"`
-	Seed          int64
-	Bucket        string `json:"bucket"`
-	Region        string `json:"region"`
-	SaveOnBucket  bool   `json:"save_on_bucket"`
-	PrintGraph    bool   `json:"print_graph"`
+	Seed          int64   `json:"seed"`
+	Bucket        string  `json:"bucket"`
+	Region        string  `json:"region"`
+	SaveOnBucket  bool    `json:"save_on_bucket"`
+	PrintGraph    bool    `json:"print_graph"`
+	Locally       bool    `json:"locally"`
 }
 
 func ReadJsonConfig(config *Config) {

@@ -1,16 +1,7 @@
 
 version: '3'
 services:
-   app-master:
-    build:
-      context: ./Master
-    volumes:
-      - ./output:/Master/output
-      - ./configuration.json:/Master/constants/configuration.json
-    environment:
-      - TZ=Europe/Rome
-    networks:
-      - my-network
+
    app-mapper-1:
     build:
       context: ./Mapper
