@@ -1,8 +1,8 @@
 package internal
 
 import (
-	"Master/mapper"
-	"Master/reducer"
+	"ResultChecker/mapper"
+	"ResultChecker/reducer"
 	"container/ring"
 	"context"
 	"google.golang.org/grpc"

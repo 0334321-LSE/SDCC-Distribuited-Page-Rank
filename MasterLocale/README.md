@@ -1,5 +1,5 @@
 # LOCAL MASTER
-It can be used outside EC2 instances for testing or debugging. <br>
+It can be used outside EC2 instance for testing or debugging. <br>
 ## How to run
 1) Start docker compose
 2) As usually set your parameters in /PageRank/configuration.json, in particular, set **locally** at true

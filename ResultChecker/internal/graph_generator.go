@@ -1,7 +1,7 @@
 package internal
 
 import (
-	"Master/constants"
+	"ResultChecker/constants"
 	"fmt"
 	"git.sr.ht/~sbinet/gg"
 	"image/color"

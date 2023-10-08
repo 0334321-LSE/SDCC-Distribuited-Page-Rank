@@ -1,7 +1,7 @@
 package reducer
 
 import (
-	"Master/constants"
+	"ResultChecker/constants"
 	"context"
 	"errors"
 	"log"
