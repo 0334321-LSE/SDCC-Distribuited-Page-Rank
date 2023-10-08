@@ -1,6 +1,6 @@
 {
     "num_mapper": 5,
-    "num_reducer": 2,
+    "num_reducer": 5,
     "mapper_pn" : 9000,
     "mapper_hb_pn": 40000,
     "reducer_pn" : 10000,
@@ -16,6 +16,6 @@
     "bucket" : "sdcc-pagerank-bucket",
     "region" : "us-east-1",
     "save_on_bucket" : false,
-    "print_graph" : true,
+    "print_graph" : false,
     "locally" : true
 }

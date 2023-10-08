@@ -10,7 +10,7 @@
     "graph_path" : "./output/graph.txt",
     "log_path" : "./output/log.txt",
     "max_iteration" : 100,
-    "num_nodes" : 20000,
+    "num_nodes" : 5000,
     "edges_to_attach" : 5,
     "seed" : 4,
     "bucket" : "sdcc-pagerank-bucket",

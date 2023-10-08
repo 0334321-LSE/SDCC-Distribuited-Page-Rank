@@ -97,5 +97,50 @@ services:
     networks:
       - my-network
 
+   app-reducer-3:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10003:10003"  # Assegna porte univoche ai reducer
+      - "41003:41003"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10003
+      - HB_PORT=41003
+    networks:
+      - my-network
+
+   app-reducer-4:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10004:10004"  # Assegna porte univoche ai reducer
+      - "41004:41004"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10004
+      - HB_PORT=41004
+    networks:
+      - my-network
+
+   app-reducer-5:
+    build:
+      context: ./Reducer
+    volumes:
+      - ./configuration.json:/Reducer/constants/configuration.json
+    ports:
+      - "10005:10005"  # Assegna porte univoche ai reducer
+      - "41005:41005"  # Porta univoca per servizio di HeartBeat
+    environment:
+      - TZ=Europe/Rome
+      - REDUCER_PORT=10005
+      - HB_PORT=41005
+    networks:
+      - my-network
+
 networks:
   my-network:

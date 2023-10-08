@@ -10,6 +10,8 @@ import (
 	"fmt"
 	"google.golang.org/grpc"
 	"log"
+	"runtime/pprof"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -44,17 +46,17 @@ func main() {
 
 	//Initializing mapper ring
 	for i := 1; i <= config.NumMapper; i++ {
-		mapperRing.Value = fmt.Sprintf("localhost:%d", config.MapperPn+i)
+		mapperRing.Value = fmt.Sprintf(":%d", config.MapperPn+i)
 		mapperRing = mapperRing.Next()
-		mapperHbRing.Value = fmt.Sprintf("localhost:%d", config.MapperHbPn+i)
+		mapperHbRing.Value = fmt.Sprintf(":%d", config.MapperHbPn+i)
 		mapperHbRing = mapperHbRing.Next()
 	}
 
 	//Initializing reducer ring
 	for i := 1; i <= config.NumReducer; i++ {
-		reducerRing.Value = fmt.Sprintf("localhost:%d", config.ReducerPn+i)
+		reducerRing.Value = fmt.Sprintf(":%d", config.ReducerPn+i)
 		reducerRing = reducerRing.Next()
-		reducerHbRing.Value = fmt.Sprintf("localhost:%d", config.ReducerHbPn+i)
+		reducerHbRing.Value = fmt.Sprintf(":%d", config.ReducerHbPn+i)
 		reducerHbRing = reducerHbRing.Next()
 	}
 
@@ -90,25 +92,26 @@ func main() {
 	var wg sync.WaitGroup
 
 	for !convergence && iteration < config.MaxIteration {
-		func() {
 
-			iteration++
-			aggregatePageRankShares := make(map[int][]float32)
-			sinkMass := 0.0
-			log.Printf("\nIteration number: %d", iteration)
-			oldPageRankList = internal.ListOfPageRank(graph)
+		iteration++
+		aggregatePageRankShares := make(map[int][]float32)
+		sinkMass := 0.0
+		log.Printf("\nIteration number: %d", iteration)
+		oldPageRankList = internal.ListOfPageRank(graph)
 
-			// Launch a job for each node of the graph, with a round robing scheduling among containers
-			//----- MAPPER -> MAP -----
-			logMessage = fmt.Sprintf("\n\nITERATION -> %d", iteration)
-			internal.WriteOnLog(logMessage)
+		// Launch a job for each node of the graph, with a round robing scheduling among containers
+		//----- MAPPER -> MAP -----
+		logMessage = fmt.Sprintf("\n\nITERATION -> %d", iteration)
+		internal.WriteOnLog(logMessage)
 
-			for m, node := range graph {
-				node := node
-				m := m
-				wg.Add(1)
-				go func() {
-					defer wg.Done()
+		for m, node := range graph {
+			node := node
+			m := m
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				labels := pprof.Labels("function", "map", "node-id", strconv.Itoa(m))
+				pprof.Do(context.Background(), labels, func(_ context.Context) {
 					chosen := internal.CheckIfMapperIsAlive(m, &connWithMapper, &mapperRing, &connWithMapperHb, &mapperHbRing)
 					// If at least one container is alive, launch map task
 					// Connection with MapperClient on ports 900X, for each node launch MAP job
@@ -123,124 +126,124 @@ func main() {
 					if err != nil {
 						log.Fatalf("Error when calling Map function: %v", err)
 					}
-				}()
+				})
+			}()
+		}
+		wg.Wait()
+		//Shuffle parts of map-reduce paradigm
+		// For each node in the graph save its contributes to other nodes
+		for _, graphNode := range graph {
+			for _, node := range mapperOutputArrayList[graphNode.ID].GetAdjacencyList() {
+				//Update page rank aggregate table by appending for each node in the mapper output corresponding share
+				aggregatePageRankShares[int(node)] = append(aggregatePageRankShares[int(node)], mapperOutputArrayList[graphNode.ID].PageRankShare)
 			}
-			wg.Wait()
-			//Shuffle parts of map-reduce paradigm
-			// For each node in the graph save its contributes to other nodes
-			for _, graphNode := range graph {
-				for _, node := range mapperOutputArrayList[graphNode.ID].GetAdjacencyList() {
-					//Update page rank aggregate table by appending for each node in the mapper output corresponding share
-					aggregatePageRankShares[int(node)] = append(aggregatePageRankShares[int(node)], mapperOutputArrayList[graphNode.ID].PageRankShare)
+		}
+
+		//----- REDUCER -> REDUCE -----
+		for m, node := range graph {
+			node := node
+			m := m
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				chosen := internal.CheckIfReducerIsAlive(m, &connWithReducer, &reducerRing, &connWithReducerHb, &reducerHbRing)
+				// If at least one container is alive, launch reduce task
+				// Connection with ReducerClient on ports 10000X, for each node launch REDUCE-job
+				reducerConnection := reducer.NewReducerClient(connWithReducer[chosen][0])
+				// Now is connected with I-TH container, launch map task
+				reducerInput := reducer.ReducerInput{
+					NodeId:         int32(node.ID),
+					PageRankShares: aggregatePageRankShares[node.ID],
+					GraphSize:      int32(numNodes),
 				}
-			}
+				reducerOutput, err := reducerConnection.Reduce(context.Background(), &reducerInput)
+				reducerOutputArrayList[node.ID] = reducerOutput
+				if err != nil {
+					log.Fatalf("Error when calling Reduce function: %s", err)
+				}
+			}()
+		}
+		wg.Wait()
+		for _, node := range graph {
+			//Update node page rank value
+			node.PageRank = float64(reducerOutputArrayList[node.ID].NewRankValue)
+		}
 
-			//----- REDUCER -> REDUCE -----
-			for m, node := range graph {
-				node := node
-				m := m
-				wg.Add(1)
-				go func() {
-					defer wg.Done()
-					chosen := internal.CheckIfReducerIsAlive(m, &connWithReducer, &reducerRing, &connWithReducerHb, &reducerHbRing)
-					// If at least one container is alive, launch reduce task
-					// Connection with ReducerClient on ports 10000X, for each node launch REDUCE-job
-					reducerConnection := reducer.NewReducerClient(connWithReducer[chosen][0])
-					// Now is connected with I-TH container, launch map task
-					reducerInput := reducer.ReducerInput{
-						NodeId:         int32(node.ID),
-						PageRankShares: aggregatePageRankShares[node.ID],
-						GraphSize:      int32(numNodes),
-					}
-					reducerOutput, err := reducerConnection.Reduce(context.Background(), &reducerInput)
-					reducerOutputArrayList[node.ID] = reducerOutput
-					if err != nil {
-						log.Fatalf("Error when calling Reduce function: %s", err)
-					}
-				}()
-			}
-			wg.Wait()
-			for _, node := range graph {
-				//Update node page rank value
-				node.PageRank = float64(reducerOutputArrayList[node.ID].NewRankValue)
-			}
+		//----- CLEAN UP PHASE -----
 
-			//----- CLEAN UP PHASE -----
+		//----- MAPPER-> CLEAN UP -----
+		for m, node := range graph {
+			node := node
+			m := m
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				chosen := internal.CheckIfMapperIsAlive(m, &connWithMapper, &mapperRing, &connWithMapperHb, &mapperHbRing)
+				// If at least one container is alive, launch map clean up task
+				// Connection with MapperClient on ports 900X, for each node launch MAP-CLEAN job
+				mapperConnection := mapper.NewMapperClient(connWithMapper[chosen][0])
+				mapperInput := mapper.CleanUpInput{
+					PageRank:      float32(node.PageRank),
+					AdjacencyList: internal.GetOutLinks(node),
+				}
+				//Sums sink's mass
+				cleanUpOutput, err := mapperConnection.CleanUp(context.Background(), &mapperInput)
+				mapperCleanUpOutputArrayList[node.ID] = cleanUpOutput
+				if err != nil {
+					log.Fatalf("Error when calling Map function: %s", err)
+				}
+			}()
+		}
 
-			//----- MAPPER-> CLEAN UP -----
-			for m, node := range graph {
-				node := node
-				m := m
-				wg.Add(1)
-				go func() {
-					defer wg.Done()
-					chosen := internal.CheckIfMapperIsAlive(m, &connWithMapper, &mapperRing, &connWithMapperHb, &mapperHbRing)
-					// If at least one container is alive, launch map clean up task
-					// Connection with MapperClient on ports 900X, for each node launch MAP-CLEAN job
-					mapperConnection := mapper.NewMapperClient(connWithMapper[chosen][0])
-					mapperInput := mapper.CleanUpInput{
-						PageRank:      float32(node.PageRank),
-						AdjacencyList: internal.GetOutLinks(node),
-					}
-					//Sums sink's mass
-					cleanUpOutput, err := mapperConnection.CleanUp(context.Background(), &mapperInput)
-					mapperCleanUpOutputArrayList[node.ID] = cleanUpOutput
-					if err != nil {
-						log.Fatalf("Error when calling Map function: %s", err)
-					}
-				}()
-			}
+		wg.Wait()
+		for _, node := range graph {
+			sinkMass += float64(mapperCleanUpOutputArrayList[node.ID].SinkMass)
+		}
 
-			wg.Wait()
-			for _, node := range graph {
-				sinkMass += float64(mapperCleanUpOutputArrayList[node.ID].SinkMass)
-			}
+		//----- REDUCER -> REDUCE-CLEANUP -----
+		for m, node := range graph {
+			m := m
+			node := node
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				chosen := internal.CheckIfReducerIsAlive(m, &connWithReducer, &reducerRing, &connWithReducerHb, &reducerHbRing)
+				// If at least one container is alive, launch reducer clean up task
+				// Connection with ReducerClient on ports 10000X, for each node launch REDUCE-CLEAN job
+				reducerConnection := reducer.NewReducerClient(connWithReducer[chosen][0])
+				reducerCleanUpInput := reducer.ReducerCleanUpInput{
+					NodeId:          int32(node.ID),
+					CurrentPageRank: float32(node.PageRank),
+					GraphSize:       int32(numNodes),
+					SinkMass:        float32(sinkMass),
+				}
+				reducerOutput, err := reducerConnection.ReduceCleanUp(context.Background(), &reducerCleanUpInput)
+				reducerCleanUpOutputArrayList[node.ID] = reducerOutput
+				if err != nil {
+					log.Fatalf("Error when calling Reduce function: %s", err)
+				}
+			}()
+		}
 
-			//----- REDUCER -> REDUCE-CLEANUP -----
-			for m, node := range graph {
-				m := m
-				node := node
-				wg.Add(1)
-				go func() {
-					defer wg.Done()
-					chosen := internal.CheckIfReducerIsAlive(m, &connWithReducer, &reducerRing, &connWithReducerHb, &reducerHbRing)
-					// If at least one container is alive, launch reducer clean up task
-					// Connection with ReducerClient on ports 10000X, for each node launch REDUCE-CLEAN job
-					reducerConnection := reducer.NewReducerClient(connWithReducer[chosen][0])
-					reducerCleanUpInput := reducer.ReducerCleanUpInput{
-						NodeId:          int32(node.ID),
-						CurrentPageRank: float32(node.PageRank),
-						GraphSize:       int32(numNodes),
-						SinkMass:        float32(sinkMass),
-					}
-					reducerOutput, err := reducerConnection.ReduceCleanUp(context.Background(), &reducerCleanUpInput)
-					reducerCleanUpOutputArrayList[node.ID] = reducerOutput
-					if err != nil {
-						log.Fatalf("Error when calling Reduce function: %s", err)
-					}
-				}()
-			}
+		wg.Wait()
+		for _, node := range graph {
+			//Update node page rank value
+			node.PageRank = float64(reducerCleanUpOutputArrayList[node.ID].NewRankValue)
+		}
 
-			wg.Wait()
-			for _, node := range graph {
-				//Update node page rank value
-				node.PageRank = float64(reducerCleanUpOutputArrayList[node.ID].NewRankValue)
-			}
+		//Get new page rank to check the differences between the old ones
+		newPageRankList = internal.ListOfPageRank(graph)
 
-			//Get new page rank to check the differences between the old ones
-			newPageRankList = internal.ListOfPageRank(graph)
+		i := 0
+		//Save on the log intermediate update
+		for _, nodePageRank := range newPageRankList {
+			internal.WriteOnLog(fmt.Sprintf("\nNode %d -> PageRank %f", i, nodePageRank))
+			i++
+		}
 
-			i := 0
-			//Save on the log intermediate update
-			for _, nodePageRank := range newPageRankList {
-				internal.WriteOnLog(fmt.Sprintf("\nNode %d -> PageRank %f", i, nodePageRank))
-				i++
-			}
+		// Check the convergence of the algorithm
+		convergence = internal.Convergence(oldPageRankList, newPageRankList)
 
-			// Check the convergence of the algorithm
-			convergence = internal.Convergence(oldPageRankList, newPageRankList)
-
-		}()
 	}
 
 	// Close client connections
